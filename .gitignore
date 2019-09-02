@@ -1,4 +1,9 @@
 
 lib/
-main/
+*.png
+*.hdr
+*.img
+*.mat
+*.voi
+
 
