@@ -1,0 +1,32 @@
+2011/02/09  Ver 1.2.1
+  - 1 function is fixed a bug.
+        fmri_selectRoi.m
+
+
+2010/10/01  Ver 1.2
+  - 1 function to use LIBLINEAR as classifier is implemented.
+        liblinear_bdtb.m
+
+  - 6 functions for preprocessing and validation are implemented.
+        fmri_xyz2imgMask.m poolSample.m, removeBlockSample.m, selectBlockSample.m,
+        selectLabelSample.m, validate.m
+
+  - 5 functions are updated.
+        fmri_saveMat.m, fmri_selectRoi.m, averageBlocks.m, crossValidate.m, freqTableFromLabels.m
+
+  - Some utilities are implemented.
+
+
+2010/08/10  Ver 1.1
+  - 3 functions to use SLR(Sparse Logistic Regression) as classifier are implemented.
+        slr_var_bdtb.m, slr_lap_bdtb.m, smlr_bdtb.m
+
+  - 4 functions for preprocessing are implemented.
+        highPassFilter.m, averageLabels.m, selectTopFvals.m, balanceLabels.m
+
+  - Some utilities are implemented.
+
+
+
+2010/05/11  Ver 1.0
+
