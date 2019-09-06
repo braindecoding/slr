@@ -159,8 +159,8 @@ if remove
     num_remove                 = length(ind_remove_chans);
     D.data(:,ind_remove_chans) = [];
     D.xyz(:,ind_remove_chans)  = [];
-    D.tvals(ind_remove_chans)  = [];
-    D.rois(:,ind_remove_chans)   = [];
+    %D.tvals(ind_remove_chans)  = [];
+    %D.rois(:,ind_remove_chans)   = [];
     
     fprintf('\n Total outliers channels removed:\t%d\t(%.3f %%)',num_remove,100*num_remove/size(ind_all,2));
     if 100*num_remove/size(ind_all,2)>10
