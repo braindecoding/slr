@@ -44,7 +44,7 @@ max_val   = getFieldDef(pars,'max_val',inf);
 min_val   = getFieldDef(pars,'min_val',-inf);
 breaks    = getFieldDef(pars,'breaks',[]);
 break_run = getFieldDef(pars,'break_run',1);
-verbose   = getFieldDef(pars,'varbose',1);
+verbose   = getFieldDef(pars,'verbose',3);
 
 if min_val>-inf || max_val<inf
     method = getFieldDef(pars,'method',3);
