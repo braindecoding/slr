@@ -41,7 +41,7 @@ base_conds = getFieldDef(pars,'base_conds',1);
 zero_thres = getFieldDef(pars,'zero_thres',1);
 breaks     = getFieldDef(pars,'breaks',[]);
 break_run  = getFieldDef(pars,'break_run',1);
-verbose    = getFieldDef(pars,'verbose',1);
+verbose    = getFieldDef(pars,'verbose',3);
 mode       = getFieldDef(pars,'mode',0);
 
 if isempty(breaks)
