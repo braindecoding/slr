@@ -79,18 +79,30 @@ for itb=1:num_breaks
 
     % Find indexes of base condition:
     %ind_use  = ismember(bi:ei,[inds_conds{base_conds}]);
+    
+    %%debug rolly - start
+    fprintf('base_conds : ')
+    disp(base_conds)
+    %%debug rolly -end
+    
     %rolly modification 1 for [inds_conds{base_conds}] --start
-    %merged_conds = [];
-    %for v = base_conds(1):1:base_conds(2)
-    %    merged_conds = [merged_conds; inds_conds{v}];
-    %end
-    %ind_use=ismember(bi:ei,merged_conds);
-    %rolly modification --end
-    %rolly modification 2 for [inds_conds{base_conds}] --start
     merged_conds = [];
-    merged_conds = [merged_conds; inds_conds{base_conds(1)}; inds_conds{base_conds(2)}];
+    for v = base_conds(1):1:base_conds(2)
+        merged_conds = [merged_conds; inds_conds{v}];
+    end
     ind_use=ismember(bi:ei,merged_conds);
     %rolly modification --end
+    
+    %rolly modification 2 for [inds_conds{base_conds}] --start
+    %merged_conds = [];
+    %merged_conds = [merged_conds; inds_conds{base_conds(1)}; inds_conds{base_conds(2)}];
+    %ind_use=ismember(bi:ei,merged_conds);
+    %rolly modification --end
+    
+    %%debug rolly - start
+    fprintf('ind_use : ')
+    disp(ind_use)
+    %%debug rolly -end
 
     % Calc baseline:
     baseline = mean(data_temp(ind_use,:),1);
