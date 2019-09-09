@@ -78,7 +78,10 @@ for itb=1:num_breaks
     data_temp = D.data(bi:ei,:);
 
     % Find indexes of base condition:
+    crot=bi:ei
+    ngok=[inds_conds{base_conds}]
     ind_use  = ismember(bi:ei,[inds_conds{base_conds}]);
+    %ind_use  = ismember(bi:ei,inds_conds(base_conds));
 
     % Calc baseline:
     baseline = mean(data_temp(ind_use,:),1);
