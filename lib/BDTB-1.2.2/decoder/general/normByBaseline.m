@@ -78,10 +78,14 @@ for itb=1:num_breaks
     data_temp = D.data(bi:ei,:);
 
     % Find indexes of base condition:
-    crot=bi:ei
-    ngok=[inds_conds{base_conds}]
-    ind_use  = ismember(bi:ei,[inds_conds{base_conds}]);
-    %ind_use  = ismember(bi:ei,inds_conds(base_conds));
+    %ind_use  = ismember(bi:ei,[inds_conds{base_conds}]);
+    %rolly modification for [inds_conds{base_conds}] --start
+    merged_conds = [];
+    for v = base_conds(1):1:base_conds(2)
+        merged_conds = [merged_conds; inds_conds{v}];
+    end
+    ind_use=ismember(bi:ei,merged_conds);
+    %rolly modification --end
 
     % Calc baseline:
     baseline = mean(data_temp(ind_use,:),1);
