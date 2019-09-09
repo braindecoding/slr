@@ -79,11 +79,16 @@ for itb=1:num_breaks
 
     % Find indexes of base condition:
     %ind_use  = ismember(bi:ei,[inds_conds{base_conds}]);
-    %rolly modification for [inds_conds{base_conds}] --start
+    %rolly modification 1 for [inds_conds{base_conds}] --start
+    %merged_conds = [];
+    %for v = base_conds(1):1:base_conds(2)
+    %    merged_conds = [merged_conds; inds_conds{v}];
+    %end
+    %ind_use=ismember(bi:ei,merged_conds);
+    %rolly modification --end
+    %rolly modification 2 for [inds_conds{base_conds}] --start
     merged_conds = [];
-    for v = base_conds(1):1:base_conds(2)
-        merged_conds = [merged_conds; inds_conds{v}];
-    end
+    merged_conds = [merged_conds; inds_conds{base_conds(1)}; inds_conds{base_conds(2)}];
     ind_use=ismember(bi:ei,merged_conds);
     %rolly modification --end
 
