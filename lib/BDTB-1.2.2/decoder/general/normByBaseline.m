@@ -87,7 +87,7 @@ for itb=1:num_breaks
     
     %rolly modification 1 for [inds_conds{base_conds}] --start
     merged_conds = [];
-    for v = base_conds(1):1:base_conds(2)
+    for v = base_conds
         merged_conds = [merged_conds; inds_conds{v}];
     end
     ind_use=ismember(bi:ei,merged_conds);
@@ -102,6 +102,8 @@ for itb=1:num_breaks
     %%debug rolly - start
     fprintf('ind_use : ')
     disp(ind_use)
+    fprintf('bi:ei : ')
+    disp(bi:ei)
     %%debug rolly -end
 
     % Calc baseline:
