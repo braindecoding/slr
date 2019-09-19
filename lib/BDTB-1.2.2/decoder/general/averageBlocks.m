@@ -39,7 +39,7 @@ end
 begin_off     = getFieldDef(pars,'begin_off',0);
 end_off       = getFieldDef(pars,'end_off',0);
 target_labels = getFieldDef(pars,'target_labels',unique(D.label));
-verbose       = getFieldDef(pars,'verbose',1);
+verbose       = getFieldDef(pars,'verbose',2);
 
 % make inds:
 % block:
