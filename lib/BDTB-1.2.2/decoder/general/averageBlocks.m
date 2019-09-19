@@ -120,8 +120,10 @@ vol_inds = cell2mat(vol_inds);
 
 
 %% Make labels:
-D.label = D.label(vol_inds);
-
+%D.label = D.label(vol_inds);
+% rolly debug -- start
+D.label = D.label(vol_inds,:);
+% rolly debug -- end
 
 %% Make design:
 D.design = D.design(vol_inds,:);
