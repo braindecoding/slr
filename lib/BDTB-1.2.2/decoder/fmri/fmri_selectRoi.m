@@ -125,7 +125,10 @@ num_use = length(find(inds_use));
 %% Select data within ROIs:
 D.data = D.data(:,inds_use);
 if isfield(D,'xyz'),    D.xyz  = D.xyz(:,inds_use);     end
-if isfield(D,'stat'),   D.stat = D.stat(:,inds_use);    end
+%if isfield(D,'stat'),   D.stat = D.stat(:,inds_use);    end
+% rolly debug --- begin
+if isfield(D,'stat'),   D.stat = D.stat(logical(rois_inds),inds_use);    end
+% rolly debug --- end
 D.roi  = D.roi(logical(rois_inds),inds_use);
 
 

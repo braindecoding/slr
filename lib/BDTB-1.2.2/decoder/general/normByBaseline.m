@@ -94,17 +94,18 @@ for itb=1:num_breaks
     %ind_use=ismember(bi:ei,merged_conds);
     %rolly modification --end
     
-    %%debug rolly - start
-    %fprintf('ind_use : ')
-    %disp(ind_use)
-    %fprintf('bi:ei : ')
-    %disp(bi:ei)
-    %%debug rolly -end
+    
 
     % Calc baseline:
-    baseline = mean(data_temp(ind_use,:),1);
-    sd = std(data_temp(ind_use,:),[],1);
-
+    %baseline = mean(data_temp(ind_use,:),1);
+    %sd = std(data_temp(ind_use,:),[],1);
+    %%debug rolly - start
+    crot=data_temp(ind_use,:)
+    baseline = mean(crot,1);
+    sd = std(crot,[],1);
+    %disp(crot)
+    %%debug rolly -end
+    
     % Find baseline indexes ~= 0 (to avoid dividing by them):
     if mode == 0 || mode == 1
         zero_ind  = find(abs(baseline) <= zero_thres);    
