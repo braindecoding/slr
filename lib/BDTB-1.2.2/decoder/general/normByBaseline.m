@@ -56,10 +56,16 @@ if isempty(breaks)
 end
 num_breaks = size(breaks,2);
 
-uniq_conds = unique(D.label);
+%uniq_conds = unique(D.label);
+%% modif rolly -start
+uniq_conds = unique(D.label(:,1));
+%% modif rolly -end
 inds_conds = cell(length(uniq_conds),1);
 for itc=1:length(uniq_conds)
-    inds_conds{itc} = find(D.label==uniq_conds(itc))';
+    %inds_conds{itc} = find(D.label==uniq_conds(itc))';
+    %% modif rolly -start % stimulus gambar tersebut ada di baris berapa saja di label
+    inds_conds{itc} = find(D.label(:,1)==uniq_conds(itc))';
+    %% modif rolly -end
 end
 
 
@@ -70,14 +76,14 @@ end
 
 
 %% Main loop:
-for itb=1:num_breaks
-    bi = breaks(1,itb);
-    ei = breaks(2,itb);
+for itb=1:num_breaks % iterasi 32 run
+    bi = breaks(1,itb); % begin index -> bi
+    ei = breaks(2,itb); % end index -> ei
     
-    % Pull section (run) out:
+    % Pull section (run) out: ambil 1 run
     data_temp = D.data(bi:ei,:);
 
-    % Find indexes of base condition:
+    % Find indexes of base condition: grey picture as base condition
     ind_use  = ismember(bi:ei,[inds_conds{base_conds}]);
     
     %%debug rolly - start
@@ -158,3 +164,12 @@ if exist('P','var')
     pars          = P;
 end
 
+
+%% debug rolly - start Removing NaN Array which is not in baseline and make slr error
+%find NaN index 
+%[rowsidxwithnumber, columns] = find(~isnan(D.data));
+%numberidx = unique(rowsidxwithnumber)
+%D.data = D.data(numberidx,:)
+%D.label = D.label(numberidx,:)
+%D.design = D.design(numberidx,:)
+%% debug rolly -end
