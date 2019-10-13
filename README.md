@@ -16,15 +16,17 @@ You migh meet error :
 Warning: The quasi-newton algorithm does not use analytic Hessian. Hessian flag in
 options will be ignored (supplied Hessian will not be used).
 
-solution is modifiing slr_learning in SLR1.2.1alpha line 98
+solution is modifiing slr_learning in SLR1.2.1alpha line 98, in optimset by add parameter 'Algorithm','trust-region'
 
-change :
+from :
 ```
 option = optimset('Gradobj','on','Hessian','on',...
        'MaxIter', WMaxIter, 'Display', WDisplay);
 ```
-add new parameter if running in matlab >= 2018, the code change to:
+to:
 ```
    option = optimset('Gradobj','on','Hessian','on',...
        'MaxIter', WMaxIter, 'Display', WDisplay,'Algorithm','trust-region','UseParallel',true);
 ```
+
+'UseParallel',true : is optional if u want to use parallel computing by running parpool command at first.
