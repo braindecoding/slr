@@ -12,6 +12,10 @@ after that run:
 5. runshape
 
 ## Running On Matlab 2019a
+You migh meet error :
+Warning: The quasi-newton algorithm does not use analytic Hessian. Hessian flag in
+options will be ignored (supplied Hessian will not be used).
+
 solution is modifiing slr_learning in SLR1.2.1alpha line 98
 
 change :
