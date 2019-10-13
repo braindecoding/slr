@@ -26,5 +26,5 @@ option = optimset('Gradobj','on','Hessian','on',...
 add new parameter if running in matlab >= 2018, the code change to:
 ```
    option = optimset('Gradobj','on','Hessian','on',...
-       'MaxIter', WMaxIter, 'Display', WDisplay,'Algorithm','trust-region');
+       'MaxIter', WMaxIter, 'Display', WDisplay,'Algorithm','trust-region','UseParallel',true);
 ```
