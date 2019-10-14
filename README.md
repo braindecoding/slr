@@ -16,7 +16,7 @@ You migh meet error :
 Warning: The quasi-newton algorithm does not use analytic Hessian. Hessian flag in
 options will be ignored (supplied Hessian will not be used).
 
-solution is modifiing slr_learning in SLR1.2.1alpha line 98, in optimset by add parameter 'Algorithm','trust-region'
+solution is modifiing slr_learning and smlr_learning in SLR1.2.1alpha line 98, in optimset by add parameter 'Algorithm','trust-region'
 
 from :
 ```
@@ -30,3 +30,6 @@ to:
 ```
 
 'UseParallel',true : is optional if u want to use parallel computing by running parpool command at first.
+
+or you just use modif of slr121alpha from repository:
+https://github.com/awangga/SOLR
