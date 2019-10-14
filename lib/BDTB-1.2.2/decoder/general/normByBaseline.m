@@ -103,12 +103,12 @@ for itb=1:num_breaks % iterasi 32 run
     
 
     % Calc baseline:
-    %baseline = mean(data_temp(ind_use,:),1);
-    %sd = std(data_temp(ind_use,:),[],1);
+    baseline = mean(data_temp(ind_use,:),1);
+    sd = std(data_temp(ind_use,:),[],1);
     %%debug rolly - start
-    crot=data_temp(ind_use,:)
-    baseline = mean(crot,1);
-    sd = std(crot,[],1);
+    %crot=data_temp(ind_use,:)
+    %baseline = mean(crot,1);
+    %sd = std(crot,[],1);
     %disp(crot)
     %%debug rolly -end
     
