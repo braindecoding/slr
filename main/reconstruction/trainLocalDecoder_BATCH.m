@@ -28,5 +28,5 @@ trainLocalDecoder('s1_s1071119',{'1x1','1x2','2x1','2x2'},'V3','leave1',0);
 trainLocalDecoder('s1_s1071119',{'1x1','1x2','2x1','2x2'},'AllArea','leave0',0);
 trainLocalDecoder('s1_s1071119',{'1x1','1x2','2x1','2x2'},'AllArea','leave1',0);
 
-
-
+%ada kekurangan pada label 60
+trainLocalDecoder('s1_s1071119',{'2x2'},'AllArea','leave1',0);
