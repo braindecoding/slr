@@ -1,4 +1,5 @@
 main/reconstructionOLD/
+main/reconstruction/imgRecon/figure/
 *.rar
 .DS_Store
 *.png
@@ -6,5 +7,6 @@ main/reconstructionOLD/
 *.img
 *.mat
 *.voi
+*.zip
 
 
