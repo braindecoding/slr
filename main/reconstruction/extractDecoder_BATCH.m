@@ -20,8 +20,8 @@ extractDecoder({'1x1','1x2','2x1','2x2'},'V1','leave1');
 extractDecoder({'1x1','1x2','2x1','2x2'},'V2','leave0');
 extractDecoder({'1x1','1x2','2x1','2x2'},'V2','leave1');
 
-extractDecoder({'1x1','1x2','2x1','2x2'},'V3','leave0');
-extractDecoder({'1x1','1x2','2x1','2x2'},'V3','leave1');
+extractDecoder({'1x1','1x2','2x1','2x2'},'V3VP','leave0');
+extractDecoder({'1x1','1x2','2x1','2x2'},'V3VP','leave1');
 
 extractDecoder({'1x1','1x2','2x1','2x2'},'AllArea','leave0');
 extractDecoder({'1x1','1x2','2x1','2x2'},'AllArea','leave1');
