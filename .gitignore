@@ -1,5 +1,6 @@
 main/reconstructionOLD/
 *.rar
+.DS_Store
 *.png
 *.hdr
 *.img
