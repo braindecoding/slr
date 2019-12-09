@@ -271,7 +271,7 @@ P.baseFileName = ['ra' P.Gen.sbjId '_'];
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% roi setting for SPM Analyze
+%% roi setting for SPM Analyze ambil dari file yang VOX_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Directory of ROI index & stat files:
@@ -348,7 +348,8 @@ P.roiFiles = roiFiles;
 P.si_roi_all_names = roiNames;
 
 
-%============================================================
+%============================================================ Batas dari
+%Pembentukan struct P disini. Kemudian setelah ini membangun struct D
 % Get data for *_fmri_roi_v6.mat
 
 %% Make labels_samples and *_samples from block info:
@@ -423,7 +424,7 @@ P.roiPath = roiDir;
 
 spm_defaults;
 
-%% Make D.si_roi_all_volInds, D.si_roi_all_volInds_cells with make_roi_volIndex_visRecon:
+%% Make D.si_roi_all_volInds, D.si_roi_all_volInds_cells with make_roi_volIndex_visRecon: disini pengambilan file VOX_*, nama file VOX ada dalam fungsi dibawa ini
 [D.si_roi_all_volInds_cells, D.si_roi_all_volInds] = make_roi_volIndex_visRecon(P.roiPath, P.roiFiles, P.fMRI.vol_first);
 
 %% Make D.roi, D.roi_name, D.xyz D.si_roi_all_volInds_cells D.si_roi_all_volInds with fmri_readRois
