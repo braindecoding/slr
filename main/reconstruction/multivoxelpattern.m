@@ -18,3 +18,8 @@ while n<=1152
     saveas(gcf,strcat(figuresfolder,int2str(n),'.png'))
     n=n+1
 end
+
+%% no rest data di trainlocalDecoder line 304
+
+% dapatkan index dari label dengan nilai pada kolom 2 > 1
+% dari index tersebut buat struct baru dengan tidak mencantumkan index 
