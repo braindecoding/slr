@@ -1,5 +1,9 @@
+__pycache__
 main/reconstructionOLD/
 main/reconstruction/imgRecon/figure/
+main/reconstruction/nnmodel/1x1
+main/reconstruction/nnmodel/fig
+main/reconstruction/nnmodel/figrec
 *.rar
 .DS_Store
 *.png
