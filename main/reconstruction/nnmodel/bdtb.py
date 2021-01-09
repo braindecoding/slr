@@ -48,8 +48,8 @@ def createmodel(train_data,label_data,filename):
     y = label_data
     # define the keras model
     model = Sequential()
-    model.add(Dense(1450, input_dim=967, activation='relu'))
-    model.add(Dense(967, activation='relu'))
+    model.add(Dense(3412, input_dim=3412, activation='relu'))
+    model.add(Dense(3412, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
