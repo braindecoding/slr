@@ -53,7 +53,7 @@ def createmodel(train_data,label_data,filename):
     model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model.fit(X, y, epochs=150, batch_size=10)
+    model.fit(X, y, epochs=1500, batch_size=10)
     # evaluate the keras model
     _, accuracy = model.evaluate(X, y)
     print('Accuracy: %.2f' % (accuracy*100))
