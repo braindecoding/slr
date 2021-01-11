@@ -44,12 +44,13 @@ def getlabel(alllabel,x):
 
 #https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/
 def createmodel(train_data,label_data,filename):
-    X = train_data / 5.0
+    X = train_data
     y = label_data
     # define the keras model
     model = Sequential()
-    model.add(Dense(3412, input_dim=3412, activation='relu'))
-    model.add(Dense(3412, activation='relu'))
+    model.add(Dense(1024, input_dim=3412, activation='relu'))
+    model.add(Dense(512, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])

@@ -20,7 +20,7 @@ for x in range(1,101):
     bdtb.createmodel(train_data,labelperpx,'.\\1x1\\label'+str(x))
 
 
-# In[]: load data norest
+# In[]: testing aja untuk melihad data
 a,b=bdtb.loaddatanorest(mat)
 
 # In[]: load data norest
@@ -36,7 +36,7 @@ for x in range(2,101):
     pikselbr=bdtb.generatePixel('.\\1x1\\label'+str(x),testdt)
     piksel=np.concatenate((piksel,pikselbr),axis=1)
     
-# In[]:
+# In[]: matrix to image label
     
 
 z=bdtb.delfirstCol(testlb)
@@ -45,7 +45,7 @@ for i in z:
     bdtb.saveFig(i,'.\\fig\\'+str(n)+'.png')
     n=n+1
     
-# In[]:
+# In[]: matrix to image pembangkitan
 
 n=1
 for i in piksel:
