@@ -48,13 +48,13 @@ def createmodel(train_data,label_data,filename):
     y = label_data
     # define the keras model
     model = Sequential()
-    model.add(Dense(1024, input_dim=3412, activation='relu'))
-    model.add(Dense(512, activation='relu'))
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(12, input_dim=967, activation='relu'))
+    model.add(Dense(8, activation='relu'))
+    #model.add(Dense(128, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    model.fit(X, y, epochs=1500, batch_size=10)
+    model.fit(X, y, epochs=1500, batch_size=100)
     # evaluate the keras model
     _, accuracy = model.evaluate(X, y)
     print('Accuracy: %.2f' % (accuracy*100))
@@ -67,8 +67,17 @@ def generatePixel(pxpath,data):
 def showFig(az):
     gbr = az.reshape((10,10)).T
     plt.imshow(gbr)
+
+def getfoldernamefrompath(fullpath):
+    return fullpath.split('\\')[1]
+    
+def createfolder(foldername):
+    import os
+    if not os.path.exists(foldername):
+        os.makedirs(foldername)
     
 def saveFig(az,fname):
+    createfolder(getfoldernamefrompath(fname))
     data = az.reshape((10,10)).T
     new_data = np.zeros(np.array(data.shape) * 10)
     for j in range(data.shape[0]):

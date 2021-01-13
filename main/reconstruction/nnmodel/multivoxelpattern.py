@@ -7,8 +7,8 @@ Created on Fri Jan  8 04:38:55 2021
 import bdtb
 import scipy.io
 
-matfile='../de_s1_AllArea_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat'
-#matfile='../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat'
+#matfile='../de_s1_AllArea_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat'
+matfile='../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat'
 mat = scipy.io.loadmat(matfile)
 
 
@@ -26,7 +26,7 @@ a,b=bdtb.loaddatanorest(mat)
 # In[]: load data norest
 testdt,testlb=bdtb.loadtestandlabel(mat)
 
-# In[]: predict
+# In[]: predict dari data shape dan simpan dalam matrix piksel
 
 import numpy as np
 
@@ -52,4 +52,5 @@ for i in piksel:
     bdtb.saveFig(i,'.\\figrec\\'+str(n)+'.png')
     n=n+1
     
+# In[]:
 
