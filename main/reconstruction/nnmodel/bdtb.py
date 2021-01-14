@@ -46,9 +46,10 @@ def getlabel(alllabel,x):
 def createmodel(train_data,label_data,filename):
     X = train_data
     y = label_data
+    featurelength=len(train_data[0])
     # define the keras model
     model = Sequential()
-    model.add(Dense(12, input_dim=967, activation='relu'))
+    model.add(Dense(12, input_dim=featurelength, activation='relu'))
     model.add(Dense(8, activation='relu'))
     #model.add(Dense(128, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))

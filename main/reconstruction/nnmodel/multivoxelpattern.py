@@ -7,6 +7,14 @@ Created on Fri Jan  8 04:38:55 2021
 import bdtb
 import scipy.io
 
+
+# In[]: dev
+#matfile='../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat'
+#mat = scipy.io.loadmat(matfile)
+#train_data,label=bdtb.loadtrainandlabel(mat)
+# In[]: start
+
+
 matlist=[]
 matlist.append('../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat')
 matlist.append('../de_s1_V2_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat')
@@ -15,7 +23,6 @@ matlist.append('../de_s1_V3VP_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_le
 matlist.append('../de_s1_AllArea_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat')
 
 #matfile='../de_s1_AllArea_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat'
-matfile='../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat'
 for matfile in matlist:
     mat = scipy.io.loadmat(matfile)
     
