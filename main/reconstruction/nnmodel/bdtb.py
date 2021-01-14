@@ -88,4 +88,14 @@ def saveFig(az,fname):
 def delfirstCol(testlb):
     return np.delete(testlb,0,1)
 
-    
+def modelfolderpath(matfile):
+    mpath='.\\'+matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'\\'
+    return mpath
+
+def figfile(matfile,n):
+    figfolderpath='.\\'+matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_fig'+'\\'+str(n)+'.png'
+    return figfolderpath
+
+def figrecfile(matfile,n):
+    figfolderpath='.\\'+matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_figrec'+'\\'+str(n)+'.png'
+    return figfolderpath
