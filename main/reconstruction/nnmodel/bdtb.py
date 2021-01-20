@@ -63,7 +63,8 @@ def createmodel(train_data,label_data,filename):
     
 def generatePixel(pxpath,data):
     model = load_model(pxpath)
-    return model.predict_classes(data)
+    #return model.predict_classes(data)
+    return model.predict(data)
 
 def showFig(az):
     gbr = az.reshape((10,10)).T
