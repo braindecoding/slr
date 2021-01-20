@@ -4,6 +4,14 @@ main/reconstruction/imgRecon/figure/
 main/reconstruction/nnmodel/1x1
 main/reconstruction/nnmodel/fig
 main/reconstruction/nnmodel/figrec
+main/reconstruction/nnmodel/AllArea_1x1/
+main/reconstruction/nnmodel/V1V2_1x1/
+main/reconstruction/nnmodel/V1_1x1/
+main/reconstruction/nnmodel/V2_1x1/
+main/reconstruction/nnmodel/V3VP_1x1/
+
+
+
 *.rar
 .DS_Store
 *.png
