@@ -64,7 +64,9 @@ def createmodel(train_data,label_data,filename):
 def generatePixel(pxpath,data):
     model = load_model(pxpath)
     #return model.predict_classes(data)
-    return model.predict(data)
+    res = model.predict(data)
+    #print(res)
+    return res
 
 def showFig(az):
     gbr = az.reshape((10,10)).T
@@ -100,4 +102,8 @@ def figfile(matfile,n):
 
 def figrecfile(matfile,n):
     figfolderpath='.\\'+matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_figrec'+'\\'+str(n)+'.png'
+    return figfolderpath
+
+def msefilename(matfile):
+    figfolderpath=matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_mse.csv'
     return figfolderpath
