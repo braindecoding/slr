@@ -38,13 +38,12 @@ for matfile in matlist:
         path=bdtb.modelfolderpath(matfile)+str(x)
         pikselbr=bdtb.generatePixel(path,testdt)
         piksel=np.concatenate((piksel,pikselbr),axis=1)
-        
+
+    pxlb=bdtb.delfirstCol(testlb)
+
     # In[]: matrix to image label
-        
-    
-    z=bdtb.delfirstCol(testlb)
     n=1
-    for i in z:
+    for i in pxlb:
         bdtb.saveFig(i,bdtb.figfile(matfile,n))
         n=n+1
         

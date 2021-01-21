@@ -26,14 +26,6 @@ matlist.append('../de_s1_AllArea_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10
 for matfile in matlist:
     mat = scipy.io.loadmat(matfile)
     
-    # In[]: load data random and train save model
-    train_data,label=bdtb.loadtrainandlabel(mat)
-    
-    for x in range(1,101):
-        labelperpx=bdtb.getlabel(label,x)
-        path=bdtb.modelfolderpath(matfile)+str(x)
-        bdtb.createmodel(train_data,labelperpx,path)
-    
     # In[]: load data shape and predict dari data shape dan simpan dalam matrix piksel
     testdt,testlb=bdtb.loadtestandlabel(mat)
     
@@ -51,17 +43,6 @@ for matfile in matlist:
         
     
     pxlb=bdtb.delfirstCol(testlb)
-    n=1
-    for i in pxlb:
-        bdtb.saveFig(i,bdtb.figfile(matfile,n))
-        n=n+1
-        
-    # In[]: matrix to image pembangkitan
-    
-    n=1
-    for i in piksel:
-        bdtb.saveFig(i,bdtb.figrecfile(matfile,n))
-        n=n+1
-
-
+    mse = ((testlb - piksel)**2).mean(axis=1)
+    print(mse)
 
