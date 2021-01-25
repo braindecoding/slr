@@ -247,6 +247,7 @@ for idxBasisType = 1:length(basisTypeSet)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     fnamePreprocessedData = sprintf('de_%s_%s%s_%s_preprocessed.mat', parm.sbjID, parm.roiName, parm.saveDirPostfix, parm.basisType);
     parm.fnamePreprocessedData = fnamePreprocessedData;
+    fprintf('melakukan pemrosesan terhadap file : ',fnamePreprocessedData);
     if ~exist(fnamePreprocessedData,'file')
         fprintf('--- save %s\n\n', fnamePreprocessedData);
         save(fnamePreprocessedData,'parm','D');

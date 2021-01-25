@@ -7,15 +7,15 @@
 
 %% using scale 1x1 for proposal
 
-showReconImg('1x1','errFuncImageNonNegCon','V1')
+%showReconImg('1x1','errFuncImageNonNegCon','V1')
 showReconImg('1x1','no_opt','V1')
 
-showReconImg('1x1','errFuncImageNonNegCon','V2')
-showReconImg('1x1','no_opt','V2')
+%showReconImg('1x1','errFuncImageNonNegCon','V2')
+%showReconImg('1x1','no_opt','V2')
 
-showReconImg('1x1','errFuncImageNonNegCon','V3VP')
-showReconImg('1x1','no_opt','V3VP')
+%showReconImg('1x1','errFuncImageNonNegCon','V3VP')
+%showReconImg('1x1','no_opt','V3VP')
 
-showReconImg('1x1','errFuncImageNonNegCon','AllArea')
-showReconImg('1x1','no_opt','AllArea')
+%showReconImg('1x1','errFuncImageNonNegCon','AllArea')
+%showReconImg('1x1','no_opt','AllArea')
 
