@@ -8,17 +8,17 @@
 %nanti akan terpause, baru masuk ke langkah ini sesuai areROI
 
 %% using scale 1x1 for proposal
-calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','V1')
+%calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','V1')
 calCombCoef_figRecon_smlr('1x1','no_opt','V1')
 
-calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','V2');
-calCombCoef_figRecon_smlr('1x1','no_opt','V2');
+%calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','V2');
+%calCombCoef_figRecon_smlr('1x1','no_opt','V2');
 
-calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','V3VP')
-calCombCoef_figRecon_smlr('1x1','no_opt','V3VP')
+%calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','V3VP')
+%calCombCoef_figRecon_smlr('1x1','no_opt','V3VP')
 
-calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','AllArea');
-calCombCoef_figRecon_smlr('1x1','no_opt','AllArea');
+%calCombCoef_figRecon_smlr('1x1','errFuncImageNonNegCon','AllArea');
+%calCombCoef_figRecon_smlr('1x1','no_opt','AllArea');
 
 
 

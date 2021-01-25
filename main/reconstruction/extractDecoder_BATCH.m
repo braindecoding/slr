@@ -28,14 +28,14 @@
 
 %% start reconstruction for 1x1 for proposal
 extractDecoder({'1x1'},'V1','leave0');
-extractDecoder({'1x1'},'V1','leave1');
+%extractDecoder({'1x1'},'V1','leave1');
 
-extractDecoder({'1x1'},'V2','leave0');
-extractDecoder({'1x1'},'V2','leave1');
+%extractDecoder({'1x1'},'V2','leave0');
+%extractDecoder({'1x1'},'V2','leave1');
 
-extractDecoder({'1x1'},'V3VP','leave0');
-extractDecoder({'1x1'},'V3VP','leave1');
+%extractDecoder({'1x1'},'V3VP','leave0');
+%extractDecoder({'1x1'},'V3VP','leave1');
 
-extractDecoder({'1x1'},'AllArea','leave0');
-extractDecoder({'1x1'},'AllArea','leave1');
+%extractDecoder({'1x1'},'AllArea','leave0');
+%extractDecoder({'1x1'},'AllArea','leave1');
 
