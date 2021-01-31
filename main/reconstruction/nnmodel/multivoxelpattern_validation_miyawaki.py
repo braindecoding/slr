@@ -4,7 +4,7 @@ Created on Fri Jan  8 04:38:55 2021
 
 @author: rolly
 """
-import bdtb
+#import bdtb
 #import scipy.io
 from scipy import io
 from numpy import savetxt
