@@ -8,6 +8,20 @@ from tensorflow.keras.models import Sequential,load_model
 from tensorflow.keras.layers import Dense
 import numpy as np
 import matplotlib.pyplot as plt
+from tensorflow import device
+from tensorflow.python.client.device_lib import list_local_devices
+from tensorflow.config import list_physical_devices
+
+def testingGPUSupport():
+    local_device_protos = list_local_devices()
+    physical_devices = list_physical_devices('GPU') 
+    #tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    print(local_device_protos)
+    print(physical_devices)
+
+def runOnGPU(model):
+    with device('/gpu:0'):
+        model.fit()
 
 def loaddatanorest(mat):
     mdata =mat['D']
