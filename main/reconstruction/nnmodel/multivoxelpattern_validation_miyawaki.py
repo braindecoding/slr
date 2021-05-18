@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jan  8 04:38:55 2021
-
+file ketiga yang dijalankan untuk menghitung mse miyawaki sebagai pembanding 
 @author: rolly
 """
 #import bdtb

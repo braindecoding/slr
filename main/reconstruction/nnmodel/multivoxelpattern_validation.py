@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jan  8 04:38:55 2021
-
+file kedua yang dijalankan, untuk menghitung mse nnmodel antara label dan predict simpan dalam file csv
 @author: rolly
 """
 import bdtb

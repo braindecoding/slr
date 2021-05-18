@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jan  8 04:38:55 2021
-
+file pertama yang dijalankan: 
+    berisi load data semua area, training dan predict kemudian save label dan predictnya
 @author: rolly
 """
 import bdtb

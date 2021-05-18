@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow import device
 from tensorflow.python.client.device_lib import list_local_devices
-from tensorflow.config import list_physical_devices
+#from tensorflow.config import list_physical_devices
 
 def testingGPUSupport():
     local_device_protos = list_local_devices()
