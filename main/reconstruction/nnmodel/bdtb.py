@@ -10,14 +10,53 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow import device
 from tensorflow.python.client.device_lib import list_local_devices
-#from tensorflow.config import list_physical_devices
+import scipy.io
+
+def trainModel(matfile):
+    mat = scipy.io.loadmat(matfile)
+    train_data,label=loadtrainandlabel(mat)
+    for x in range(1,101):#pembentukan model dari pixel 1-100
+            labelperpx=getlabel(label,x)#mendapatkan label per pixel
+            path=modelfolderpath(matfile)+str(x)#melakukan set path model
+            createmodel(train_data,labelperpx,path)#membuat dan menyimpan model
+
+def testModel(matfile):
+    mat = scipy.io.loadmat(matfile)
+    testdt,testlb=loadtestandlabel(mat)
+    pixel=1
+    path=modelfolderpath(matfile)+str(pixel)
+    piksel=generatePixel(path,testdt)
+    for x in range(2,101):
+        path=modelfolderpath(matfile)+str(x)
+        pikselbr=generatePixel(path,testdt)
+        piksel=np.concatenate((piksel,pikselbr),axis=1)
+    pxlb=delfirstCol(testlb)
+    return pxlb,piksel
+
+def simpanSemuaGambar(pxlb,piksel,matfile):
+    n=1
+    for stim,recon in zip(pxlb,piksel):
+        simpanGambar(stim,recon,getfigpath(matfile,'reconstruct',n))
+        n=n+1
+
+def simpanMSE(pxlb,piksel,matfile):
+    #mse sendiri
+    mse = ((pxlb - piksel)**2).mean(axis=1)
+    np.savetxt(msefilename(matfile),mse,delimiter=',')
+    # mse miyawaki
+    
+def simpanMSEMiyawaki():
+    directory='../imgRecon/result/s1/V1/smlr/'
+    matfilename='s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_figRecon_linComb-no_opt_1x1_maxProbLabel_dimNorm.mat'
+    matfile=directory+matfilename
+    mat = scipy.io.loadmat(matfile)
+    pred,label=mat['stimFigTestAllPre'],mat['stimFigTestAll']
+    mse = ((pred - label)**2).mean(axis=1)
+    np.savetxt('miyawaki.csv',mse,delimiter=',')
 
 def testingGPUSupport():
     local_device_protos = list_local_devices()
-    physical_devices = list_physical_devices('GPU') 
-    #tf.config.experimental.set_memory_growth(physical_devices[0], True)
     print(local_device_protos)
-    print(physical_devices)
 
 def runOnGPU(model):
     with device('/gpu:0'):
@@ -63,8 +102,26 @@ def createmodel(train_data,label_data,filename):
     featurelength=len(train_data[0])
     # define the keras model
     model = Sequential()
-    model.add(Dense(12, input_dim=featurelength, activation='relu'))
-    model.add(Dense(8, activation='relu'))
+    model.add(Dense(725, input_dim=featurelength, activation='relu'))
+    model.add(Dense(543, activation='relu'))
+    model.add(Dense(407, activation='relu'))
+    model.add(Dense(305, activation='relu'))
+    model.add(Dense(228, activation='relu'))
+    model.add(Dense(171, activation='relu'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(96, activation='relu'))
+    model.add(Dense(72, activation='relu'))
+    model.add(Dense(54, activation='relu'))
+    model.add(Dense(40, activation='relu'))
+    model.add(Dense(30, activation='relu'))
+    model.add(Dense(22, activation='relu'))
+    model.add(Dense(16, activation='relu'))
+    model.add(Dense(12, activation='relu'))
+    model.add(Dense(9, activation='relu'))
+    model.add(Dense(6, activation='relu'))
+    model.add(Dense(4, activation='relu'))
+    model.add(Dense(3, activation='relu'))
+    model.add(Dense(2, activation='relu'))
     #model.add(Dense(128, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
@@ -87,11 +144,12 @@ def showFig(az):
     plt.imshow(gbr)
 
 def getfoldernamefrompath(fullpath):
-    return fullpath.split('\\')[1]
+    return fullpath.split('\\')[-2]
     
 def createfolder(foldername):
     import os
     if not os.path.exists(foldername):
+        print('membuat folder baru : '+foldername)
         os.makedirs(foldername)
     
 def saveFig(az,fname):
@@ -101,8 +159,30 @@ def saveFig(az,fname):
     for j in range(data.shape[0]):
         for k in range(data.shape[1]):
             new_data[j * 10: (j+1) * 10, k * 10: (k+1) * 10] = data[j, k]
+    print('menyimpan gambar : '+fname)
     plt.imsave(str(fname),new_data)
-    
+
+def simpanGambar(stim,recon,fname):
+    createfolder(getfoldernamefrompath(fname))
+    plt.figure()
+    sp1 = plt.subplot(131)
+    sp1.axis('off')
+    plt.title('Stimulus')
+    sp2 = plt.subplot(132)
+    sp2.axis('off')
+    plt.title('Reconstruction')
+    sp3 = plt.subplot(133)
+    sp3.axis('off')
+    plt.title('Binarized')
+    sp1.imshow(stim.reshape((10,10)).T, cmap=plt.cm.gray,
+               interpolation='nearest'),
+    sp2.imshow(recon.reshape((10,10)).T, cmap=plt.cm.gray,
+               interpolation='nearest'),
+    sp3.imshow(np.reshape(recon > .5, (10, 10)).T, cmap=plt.cm.gray,
+               interpolation='nearest')
+    plt.savefig(fname)
+#np.reshape(recon > .5, (10, 10))
+#np.reshape(y_pred[j], (10, 10))    
 def delfirstCol(testlb):
     return np.delete(testlb,0,1)
 
@@ -116,6 +196,13 @@ def figfile(matfile,n):
 
 def figrecfile(matfile,n):
     figfolderpath='.\\'+matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_figrec'+'\\'+str(n)+'.png'
+    return figfolderpath
+
+def getfigpath(matfile,suffix,n):
+    import pathlib
+    scriptDirectory = pathlib.Path().absolute()
+    figfolderpath=str(scriptDirectory)+'\\'+matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_'+suffix+'\\'+str(n)+'.png'
+    print('generate path gambar : '+figfolderpath)
     return figfolderpath
 
 def msefilename(matfile):
