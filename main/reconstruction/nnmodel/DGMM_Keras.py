@@ -248,7 +248,7 @@ S=np.mat(eng.calculateS(k, t))
 
 # In[]: Loop training
 for l in range(maxiter):
-    print ('**************************************************iter=', l)
+    print ('**************************************     iter= ', l)
     # update Z
     DGMM.fit([X_train, Y_train, Y_mu, Y_lsgms], X_train,
             shuffle=True,
@@ -298,7 +298,6 @@ for l in range(maxiter):
 X_reconstructed_mu = np.zeros((numTest, img_chns, img_rows, img_cols))
 HHT = H_mu * H_mu.T + D2 * sigma_h
 Temp = gamma_mu * np.mat(np.eye(D2)) - (gamma_mu**2) * (H_mu.T * (np.mat(np.eye(C)) + gamma_mu * HHT).I * H_mu)
-# In[]:
 for i in range(numTest):
     s=S[:,i]
     z_sigma_test = (B_mu * Temp * B_mu.T + (1 + rho * s.sum(axis=0)[0,0]) * np.mat(np.eye(K)) ).I
