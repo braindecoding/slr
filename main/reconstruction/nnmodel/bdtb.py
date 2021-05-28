@@ -43,16 +43,18 @@ def simpanMSE(pxlb,piksel,matfile):
     #mse sendiri
     mse = ((pxlb - piksel)**2).mean(axis=1)
     np.savetxt(msefilename(matfile),mse,delimiter=',')
-    # mse miyawaki
+    return mse
     
 def simpanMSEMiyawaki():
     directory='../imgRecon/result/s1/V1/smlr/'
-    matfilename='s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_figRecon_linComb-no_opt_1x1_maxProbLabel_dimNorm.mat'
+    #matfilename='s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_figRecon_linComb-no_opt_1x1_maxProbLabel_dimNorm.mat'
+    matfilename='s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_figRecon_linComb-errFuncImageNonNegCon_1x1_maxProbLabel_dimNorm.mat'
     matfile=directory+matfilename
     mat = scipy.io.loadmat(matfile)
     pred,label=mat['stimFigTestAllPre'],mat['stimFigTestAll']
     mse = ((pred - label)**2).mean(axis=1)
     np.savetxt('miyawaki.csv',mse,delimiter=',')
+    return pred,label,mse
 
 def testingGPUSupport():
     local_device_protos = list_local_devices()
@@ -166,8 +168,62 @@ def simpanGambar(stim,recon,fname):
     sp3.imshow(np.reshape(recon > .5, (10, 10)).T, cmap=plt.cm.gray,
                interpolation='nearest')
     plt.savefig(fname)
-#np.reshape(recon > .5, (10, 10))
-#np.reshape(y_pred[j], (10, 10))    
+
+def plotting(label,pred,predm,fname):
+    cols=['stimulus','rolly','miyawaki']
+    fig, ax = plt.subplots(nrows=10, ncols=3,figsize=(5, 20))
+    for axes, col in zip(ax[0], cols):
+        axes.set_title(col)
+    for row,fig,p,pm in zip(ax,label,pred,predm):
+        row[0].axis('off')
+        row[1].axis('off')
+        row[2].axis('off')
+        row[0].imshow(fig.reshape((10,10)).T, cmap=plt.cm.gray,
+               interpolation='nearest'),
+        row[1].imshow(p.reshape((10,10)).T, cmap=plt.cm.gray,
+               interpolation='nearest'),
+        row[2].imshow(pm.reshape((10, 10)).T, cmap=plt.cm.gray,
+               interpolation='nearest')
+    plt.show()
+
+def plotHasil(label,pred,predm,mse,msem,fname):
+    #createfolder(getfoldernamefrompath(fname))
+    rows=['Stimulus','Rolly','Miyawaki']
+    idx=list(range(1,len(mse)+1))
+    fig, ax = plt.subplots(nrows=3, ncols=10,figsize=(15, 5))
+    for axes, row in zip(ax[:,0], rows):
+        axes.set_ylabel(row, rotation=90, size='large')
+    for idn,col,fig in zip(idx,ax[0],label):
+        col.set_yticklabels([])
+        col.set_yticks([])
+        col.set_xticklabels([])
+        col.set_xticks([])
+        col.imshow(fig.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
+        col.set_title(idn)
+    for col,p in zip(ax[1],pred):
+        col.set_yticklabels([])
+        col.set_yticks([])
+        col.set_xticklabels([])
+        col.set_xticks([])
+        col.imshow(p.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
+    for col,pm in zip(ax[2],predm):
+        col.set_yticklabels([])
+        col.set_yticks([])
+        col.set_xticklabels([])
+        col.set_xticks([])
+        col.imshow(pm.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
+    plt.suptitle('Hasil Rekonstruksi', fontsize=16)
+    plt.show()
+    
+    fig, ax = plt.subplots(figsize=(15, 5))
+    y1=mse.tolist()
+    y2=msem.tolist()
+    ax.plot(idx[:10], y1[:10], color = 'green', label = 'rolly')
+    ax.plot(idx[:10], y2[:10], color = 'red', label = 'miyawaki')
+    ax.legend(loc = 'upper left')
+    ax.set_xticks(idx[:10])
+    plt.show()
+
 def delfirstCol(testlb):
     return np.delete(testlb,0,1)
 
