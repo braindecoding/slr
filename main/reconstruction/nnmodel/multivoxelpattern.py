@@ -19,7 +19,7 @@ matlist.append('../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leav
 for matfile in matlist:
     #bdtb.trainModel(matfile)
     label,pred=bdtb.testModel(matfile)
-    bdtb.simpanSemuaGambar(label,pred,matfile)
+    #bdtb.simpanSemuaGambar(label,pred,matfile)
     mse=bdtb.simpanMSE(label,pred,matfile)
 
 # In[1]: data pembanding dari miyawaki
