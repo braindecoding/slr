@@ -186,8 +186,9 @@ def plotting(label,pred,predm,fname):
                interpolation='nearest')
     plt.show()
 
-def plotHasil(label,pred,predm,mse,msem,fname):
-    #createfolder(getfoldernamefrompath(fname))
+def plotHasil(label,pred,predm,mse,msem,matfile,n):
+    fname1=getfigpath(matfile,'resultpict',n)
+    createfolder(getfoldernamefrompath(fname1))
     rows=['Stimulus','Rolly','Miyawaki']
     idx=list(range(1,len(mse)+1))
     fig, ax = plt.subplots(nrows=3, ncols=10,figsize=(15, 5))
@@ -213,16 +214,33 @@ def plotHasil(label,pred,predm,mse,msem,fname):
         col.set_xticks([])
         col.imshow(pm.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
     plt.suptitle('Hasil Rekonstruksi', fontsize=16)
-    plt.show()
+    # plt.show()
+    plt.savefig(fname1)
     
-    fig, ax = plt.subplots(figsize=(15, 5))
-    y1=mse.tolist()
-    y2=msem.tolist()
-    ax.plot(idx[:10], y1[:10], color = 'green', label = 'rolly')
-    ax.plot(idx[:10], y2[:10], color = 'red', label = 'miyawaki')
-    ax.legend(loc = 'upper left')
-    ax.set_xticks(idx[:10])
-    plt.show()
+    fname2=getfigpath(matfile,'resultmse',n)
+    createfolder(getfoldernamefrompath(fname2))
+    fige, axe = plt.subplots(figsize=(15, 5))
+    axe.plot(idx, mse, color = 'green', label = 'rolly')
+    axe.plot(idx, msem, color = 'red', label = 'miyawaki')
+    axe.legend(loc = 'lower left')
+    axe.set_xticks(idx)
+    # plt.show()
+    plt.savefig(fname2)
+    
+    import PIL
+    fnamegab=getfigpath(matfile,'results',n)
+    createfolder(getfoldernamefrompath(fnamegab))
+    
+    list_im = [fname1, fname2]
+    imgs    = [ PIL.Image.open(i) for i in list_im ]
+    
+    min_shape = sorted( [(np.sum(i.size), i.size ) for i in imgs])[0][1]
+    imgs_comb = np.hstack( (np.asarray( i.resize(min_shape) ) for i in imgs ) )
+    
+    imgs_comb = np.vstack( (np.asarray( i.resize(min_shape) ) for i in imgs ) )
+    imgs_comb = PIL.Image.fromarray( imgs_comb)
+    imgs_comb.save(fnamegab)
+    
 
 def delfirstCol(testlb):
     return np.delete(testlb,0,1)
@@ -249,3 +267,8 @@ def getfigpath(matfile,suffix,n):
 def msefilename(matfile):
     figfolderpath=matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_mse.csv'
     return figfolderpath
+
+def divide_chunks(l, n):
+    # looping till length l
+    for i in range(0, len(l), n): 
+        yield l[i:i + n]

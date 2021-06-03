@@ -26,4 +26,18 @@ for matfile in matlist:
 predm,labelm,msem=bdtb.simpanMSEMiyawaki()
 
 # In[1]:
-bdtb.plotHasil(label, pred, predm, mse,msem,'coba')
+mse=mse.tolist()
+msem=msem.tolist()
+# In[1]:
+n=10
+lmse=list(bdtb.divide_chunks(mse, n))
+lmsem=list(bdtb.divide_chunks(msem, n))
+# In[1]:
+lpred=list(bdtb.divide_chunks(pred, n))
+lpredm=list(bdtb.divide_chunks(predm, n))
+llabel=list(bdtb.divide_chunks(label, n))
+# In[1]: disini runnya okay
+n=1
+for label,pred,predm,mse,msem in zip(llabel,lpred,lpredm,lmse,lmsem):
+    bdtb.plotHasil(label, pred, predm, mse,msem,matfile,n)
+    n=n+1
