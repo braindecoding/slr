@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jan  8 17:15:32 2021
+Created on Fri Jun  4 13:28:33 2021
 
-@author: rolly
+@author: RPL 2020
 """
+
 from tensorflow.keras.models import Sequential,load_model
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.losses import MeanSquaredError
@@ -13,19 +14,18 @@ from tensorflow import device
 from tensorflow.python.client.device_lib import list_local_devices
 import scipy.io
 
-def trainModel(matfile,arch):
-    mat = scipy.io.loadmat(matfile)
-    train_data,label=loadtrainandlabel(mat)
+def trainModel(matfile):
+    train_data,label=loadtrainandlabel(matfile)
     for x in range(1,101):#pembentukan model dari pixel 1-100
             labelperpx=getlabel(label,x)#mendapatkan label per pixel
-            path=modelfolderpath(matfile)+str(arch)+'\\'+str(x)#melakukan set path model
-            createmodel(train_data,labelperpx,path,arch)#membuat dan menyimpan model
+            path=modelfolderpath(matfile)+str(x)#melakukan set path model
+            createmodel(train_data,labelperpx,path)#membuat dan menyimpan model
 
-def testModel(matfile,arch):
+def testModel(matfile):
     mat = scipy.io.loadmat(matfile)
     testdt,testlb=loadtestandlabel(mat)
     pixel=1
-    path=modelfolderpath(matfile)+str(arch)+'\\'+str(pixel)
+    path=modelfolderpath(matfile)+str(pixel)
     piksel=generatePixel(path,testdt)
     for x in range(2,101):
         path=modelfolderpath(matfile)+str(x)
@@ -40,12 +40,10 @@ def simpanSemuaGambar(pxlb,piksel,matfile):
         simpanGambar(stim,recon,getfigpath(matfile,'reconstruct',n))
         n=n+1
 
-def simpanMSE(pxlb,piksel,matfile,arch):
+def simpanMSE(pxlb,piksel,matfile):
     #mse sendiri
     mse = ((pxlb - piksel)**2).mean(axis=1)
-    fname=msefilename(matfile,arch)
-    createfolder(getfoldernamefrompath(fname))
-    np.savetxt(fname,mse,delimiter=',')
+    np.savetxt(msefilename(matfile),mse,delimiter=',')
     return mse
     
 def simpanMSEMiyawaki():
@@ -87,11 +85,12 @@ def loadtestandlabel(mat):
     data=nd[440:]
     return np.asarray(data, dtype=np.float64),np.asarray(label, dtype=np.float64)
     
-def loadtrainandlabel(mat):
+def loadtrainandlabel(matfile):
+    mat = scipy.io.loadmat(matfile)
     nl,nd=loaddatanorest(mat)
     alllabel=nl[:440]
     rdata=nd[:440]
-    return np.asarray(rdata, dtype=np.float64),np.asarray(alllabel, dtype=np.float64)
+    return np.asarray(rdata, dtype=np.float64),np.asarray(alllabel, dtype=np.float64)[:,1:]
 
 def getlabel(alllabel,x):
     px1=[]
@@ -101,26 +100,23 @@ def getlabel(alllabel,x):
     return label_data
 
 #https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/
-def createmodel(train_data,label_data,filename,arch):
+def createmodel(train_data,label_data,filename):
     X = train_data#440row
     y = label_data
     featurelength=len(train_data[0])
     print('feature leength : ')#967
     print(featurelength)
-    arcl=arch.split('_')
-    print(arcl)
     # define the keras model
     model = Sequential()
-    firstarch=int(arcl.pop(0))
-    model.add(Dense(firstarch, input_dim=featurelength, activation='sigmoid'))
-    for arc in arcl:
-        model.add(Dense(int(arc),activation='relu'))
-    if firstarch != 1:
-        model.add(Dense(1, activation='sigmoid'))
+    model.add(Dense(1, input_dim=featurelength, activation='sigmoid'))
+    #model.add(Dense(100, activation='relu'))
+    #model.add(Dense(128, activation='relu'))
+    #model.add(Dense(6, activation='relu'))
+    #model.add(Dense(1, activation='sigmoid'))
     # compile the keras model
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    #model.compile(loss=MeanSquaredError(), optimizer='adam', metrics=['accuracy'])
-    model.fit(X, y, epochs=1000, batch_size=10)
+    #model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss=MeanSquaredError(), optimizer='adam', metrics=['accuracy'])
+    model.fit(X, y, epochs=2000, batch_size=5)
     # evaluate the keras model
     _, accuracy = model.evaluate(X, y)
     print('Accuracy: %.2f' % (accuracy*100))
@@ -140,11 +136,6 @@ def showFig(az):
 def getfoldernamefrompath(fullpath):
     return fullpath.split('\\')[-2]
     
-def getsubfolderfrompath(fullpath):
-    mf=fullpath.split('\\')[-3]
-    subf=fullpath.split('\\')[-2]
-    return './'+mf+'/'+subf
-
 def createfolder(foldername):
     import os
     if not os.path.exists(foldername):
@@ -198,9 +189,9 @@ def plotting(label,pred,predm,fname):
                interpolation='nearest')
     plt.show()
 
-def plotHasil(label,pred,predm,mse,msem,matfile,n,arch):
-    fname1=getfigpath(matfile,'resultpict'+'\\'+arch,n)
-    createfolder(getsubfolderfrompath(fname1))
+def plotHasil(label,pred,predm,mse,msem,matfile,n):
+    fname1=getfigpath(matfile,'resultpict',n)
+    createfolder(getfoldernamefrompath(fname1))
     rows=['Stimulus','Rolly','Miyawaki']
     idx=list(range(1,len(mse)+1))
     fig, ax = plt.subplots(nrows=3, ncols=10,figsize=(15, 5))
@@ -225,23 +216,23 @@ def plotHasil(label,pred,predm,mse,msem,matfile,n,arch):
         col.set_xticklabels([])
         col.set_xticks([])
         col.imshow(pm.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
-    plt.suptitle('Hasil Rekonstruksi kelompok '+str(n), fontsize=16)
+    plt.suptitle('Hasil Rekonstruksi', fontsize=16)
     # plt.show()
     plt.savefig(fname1)
     
-    fname2=getfigpath(matfile,'resultmse'+'\\'+arch,n)
-    createfolder(getsubfolderfrompath(fname2))
+    fname2=getfigpath(matfile,'resultmse',n)
+    createfolder(getfoldernamefrompath(fname2))
     fige, axe = plt.subplots(figsize=(15, 5))
-    axe.plot(idx, mse, color = 'green', label = 'mse rolly')
-    axe.plot(idx, msem, color = 'red', label = 'mse miyawaki')
+    axe.plot(idx, mse, color = 'green', label = 'rolly')
+    axe.plot(idx, msem, color = 'red', label = 'miyawaki')
     axe.legend(loc = 'lower left')
     axe.set_xticks(idx)
     # plt.show()
     plt.savefig(fname2)
     
     import PIL
-    fnamegab=getfigpath(matfile,'results'+'\\'+arch,n)
-    createfolder(getsubfolderfrompath(fnamegab))
+    fnamegab=getfigpath(matfile,'results',n)
+    createfolder(getfoldernamefrompath(fnamegab))
     
     list_im = [fname1, fname2]
     imgs    = [ PIL.Image.open(i) for i in list_im ]
@@ -276,23 +267,11 @@ def getfigpath(matfile,suffix,n):
     print('generate path gambar : '+figfolderpath)
     return figfolderpath
 
-def msefilename(matfile,arch):
-    import pathlib
-    scriptDirectory = pathlib.Path().absolute()
-    figfolderpath=str(scriptDirectory)+'\\'+matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_mse'+'\\'+str(arch)+'.csv'
+def msefilename(matfile):
+    figfolderpath=matfile.split('_')[2]+'_'+matfile.split('_')[-2]+'_mse.csv'
     return figfolderpath
 
 def divide_chunks(l, n):
     # looping till length l
     for i in range(0, len(l), n): 
         yield l[i:i + n]
-        
-def ubahkelistofchunks(mse,msem,pred,predm,label,n):
-    mse=mse.tolist()
-    msem=msem.tolist()
-    lmse=list(divide_chunks(mse, n))
-    lmsem=list(divide_chunks(msem, n))
-    lpred=list(divide_chunks(pred, n))
-    lpredm=list(divide_chunks(predm, n))
-    llabel=list(divide_chunks(label, n))
-    return lmse,lmsem,lpred,lpredm,llabel
