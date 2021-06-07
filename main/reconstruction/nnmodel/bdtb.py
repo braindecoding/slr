@@ -122,7 +122,7 @@ def createmodel(train_data,label_data,filename,arch):
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     #model.compile(loss=MeanSquaredError(), optimizer='adam', metrics=['accuracy'])
     model.summary()
-    model.fit(X, y, epochs=1000, batch_size=40)
+    model.fit(X, y, epochs=500, batch_size=40)
     # evaluate the keras model
     _, accuracy = model.evaluate(X, y)
     print('Accuracy: %.2f' % (accuracy*100))

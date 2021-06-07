@@ -21,7 +21,7 @@ archl.append('784_256_128_10')
 archl.append('784_256_128_6')
 archl.append('784_256_128_5')
 archl.append('200_100')
-#archl.append('1')
+archl.append('1')
 matfile=matlist[0]
 for arch in archl:
     # In[]: train and predict rolly
