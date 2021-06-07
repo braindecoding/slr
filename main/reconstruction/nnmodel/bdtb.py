@@ -26,9 +26,10 @@ def testModel(matfile,arch):
     testdt,testlb=loadtestandlabel(mat)
     pixel=1
     path=modelfolderpath(matfile)+str(arch)+'\\'+str(pixel)
+    print(path)
     piksel=generatePixel(path,testdt)
     for x in range(2,101):
-        path=modelfolderpath(matfile)+str(x)
+        path=modelfolderpath(matfile)+str(arch)+'\\'+str(x)
         pikselbr=generatePixel(path,testdt)
         piksel=np.concatenate((piksel,pikselbr),axis=1)
     pxlb=delfirstCol(testlb)
@@ -120,13 +121,15 @@ def createmodel(train_data,label_data,filename,arch):
     # compile the keras model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     #model.compile(loss=MeanSquaredError(), optimizer='adam', metrics=['accuracy'])
-    model.fit(X, y, epochs=1000, batch_size=10)
+    model.summary()
+    model.fit(X, y, epochs=1000, batch_size=40)
     # evaluate the keras model
     _, accuracy = model.evaluate(X, y)
     print('Accuracy: %.2f' % (accuracy*100))
     model.save(str(filename))
     
 def generatePixel(pxpath,data):
+    print(pxpath)
     model = load_model(pxpath)
     #return model.predict_classes(data)
     res = model.predict(data)
