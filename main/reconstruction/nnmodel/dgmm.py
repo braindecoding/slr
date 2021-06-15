@@ -79,11 +79,12 @@ def loaddatanorest(mat):
             nd.append(d)
     return nl,nd
 
-def loadtestandlabel(mat):
+def loadtestandlabel(matfile):
+    mat = scipy.io.loadmat(matfile)
     nl,nd=loaddatanorest(mat)
     label=nl[440:]
     data=nd[440:]
-    return np.asarray(data, dtype=np.float64),np.asarray(label, dtype=np.float64)
+    return np.asarray(data, dtype=np.float64),np.asarray(label, dtype=np.float64)[:,1:]
     
 def loadtrainandlabel(matfile):
     mat = scipy.io.loadmat(matfile)
