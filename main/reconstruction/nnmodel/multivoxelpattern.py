@@ -25,7 +25,7 @@ archl.append('1')
 matfile=matlist[0]
 for arch in archl:
     # In[]: train and predict rolly
-    bdtb.trainModel(matfile,arch)
+    #bdtb.trainModel(matfile,arch)
     label,pred=bdtb.testModel(matfile,arch)
     #bdtb.simpanSemuaGambar(label,pred,matfile)
     mse=bdtb.simpanMSE(label,pred,matfile,arch)
