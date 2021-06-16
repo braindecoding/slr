@@ -228,7 +228,7 @@ def plotHasil(label,pred,predm,mse,msem,matfile,n,arch):
         col.set_xticklabels([])
         col.set_xticks([])
         col.imshow(pm.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
-    plt.suptitle('Hasil Rekonstruksi kelompok '+str(n), fontsize=16)
+    plt.suptitle(' Hasil Rekonstruksi Multilayer Perceptron : '+arch+', bagian ke-'+str(n), fontsize=16)
     # plt.show()
     plt.savefig(fname1)
     
@@ -240,6 +240,7 @@ def plotHasil(label,pred,predm,mse,msem,matfile,n,arch):
     axe.legend(loc = 'lower left')
     axe.set_xticks(idx)
     # plt.show()
+    plt.suptitle('Perbandingan Mean Suare Error', fontsize=16)
     plt.savefig(fname2)
     
     import PIL
