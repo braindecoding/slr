@@ -308,7 +308,7 @@ def ssimscore(gambar1,gambar2):
     # Based on: https://github.com/mostafaGwely/Structural-Similarity-Index-SSIM-
     
     # 1. Import the necessary packages
-    from skimage.measure import compare_ssim
+    from skimage.metrics import structural_similarity
     import cv2
 
     imageA = cv2.imread(gambar1)
@@ -320,7 +320,7 @@ def ssimscore(gambar1,gambar2):
     
     # 5. Compute the Structural Similarity Index (SSIM) between the two
     #    images, ensuring that the difference image is returned
-    (score, diff) = compare_ssim(grayA, grayB, full=True)
+    (score, diff) = structural_similarity(grayA, grayB, full=True)
     diff = (diff * 255).astype("uint8")
     
     # 6. You can print only the score if you want
