@@ -302,8 +302,8 @@ def ubahkelistofchunks(mse,msem,pred,predm,label,n):
     return lmse,lmsem,lpred,lpredm,llabel
 
 def ssimscore(gambar1,gambar2):
-    # Usage:
-    #
+    # Usage:ssimscore('./v2_1x1_reconstruct/10.png','./v2_1x1_reconstruct/10.png')
+    # SSIM: 1.0 is similar
     # python3 script.py --input original.png --output modified.png
     # Based on: https://github.com/mostafaGwely/Structural-Similarity-Index-SSIM-
     
