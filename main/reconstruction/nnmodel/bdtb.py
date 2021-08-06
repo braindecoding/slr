@@ -327,6 +327,13 @@ def ssimscore(gambar1,gambar2):
     print("SSIM: {}".format(score))
     return score
     
+def msescore(gambar1,gambar2):
+    #psnr 1:similar
+    original = cv2.imread(gambar1)
+    contrast = cv2.imread(gambar2,1)
+    mse = np.mean( (original - contrast) ** 2 )
+    return mse
+
 def psnrscore(gambar1,gambar2):
     #psnr 1:similar
     original = cv2.imread(gambar1)
