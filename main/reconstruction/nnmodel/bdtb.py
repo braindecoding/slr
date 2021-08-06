@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 from tensorflow import device
 from tensorflow.python.client.device_lib import list_local_devices
 import scipy.io
+from skimage.metrics import structural_similarity
+import cv2
+import math
 
 def trainModel(matfile,arch):
     mat = scipy.io.loadmat(matfile)
@@ -308,9 +311,6 @@ def ssimscore(gambar1,gambar2):
     # Based on: https://github.com/mostafaGwely/Structural-Similarity-Index-SSIM-
     
     # 1. Import the necessary packages
-    from skimage.metrics import structural_similarity
-    import cv2
-
     imageA = cv2.imread(gambar1)
     imageB = cv2.imread(gambar2)
     
@@ -325,3 +325,13 @@ def ssimscore(gambar1,gambar2):
     
     # 6. You can print only the score if you want
     print("SSIM: {}".format(score))
+    return score
+    
+def psnrscore(gambar1,gambar2):
+    original = cv2.imread(gambar1)
+    contrast = cv2.imread(gambar2,1)
+    mse = np.mean( (original - contrast) ** 2 )
+    if mse == 0:
+        return 100
+    PIXEL_MAX = 255.0
+    return 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
