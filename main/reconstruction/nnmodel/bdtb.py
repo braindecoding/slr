@@ -328,10 +328,13 @@ def ssimscore(gambar1,gambar2):
     return score
     
 def psnrscore(gambar1,gambar2):
+    #psnr 1:similar
     original = cv2.imread(gambar1)
     contrast = cv2.imread(gambar2,1)
     mse = np.mean( (original - contrast) ** 2 )
     if mse == 0:
-        return 100
-    PIXEL_MAX = 255.0
-    return 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
+        psnr = 100
+    else:
+        PIXEL_MAX = 255.0
+        psnr = 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
+    return psnr/100
