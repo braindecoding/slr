@@ -328,11 +328,12 @@ def ssimscore(gambar1,gambar2):
     return score
     
 def msescore(gambar1,gambar2):
-    #psnr 1:similar
+    #mse 1:similar
     original = cv2.imread(gambar1)
     contrast = cv2.imread(gambar2,1)
     mse = np.mean( (original - contrast) ** 2 )
-    return mse
+    #mse = ((original - contrast)**2).mean(axis=1)
+    return mse/100
 
 def psnrscore(gambar1,gambar2):
     #psnr 1:similar
@@ -345,3 +346,10 @@ def psnrscore(gambar1,gambar2):
         PIXEL_MAX = 255.0
         psnr = 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
     return psnr/100
+
+def corrscore(gambar1,gambar2):
+    #1 maka similar
+    imageA = cv2.imread(gambar1)
+    imageB = cv2.imread(gambar2)
+    cor = np.corrcoef(imageA.reshape(-1),imageB.reshape(-1))[0][1]
+    return cor
