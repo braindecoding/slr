@@ -15,25 +15,29 @@ matlist.append('../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leav
 #matlist.append('../de_s1_V3VP_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat')
 #matlist.append('../de_s1_AllArea_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat')
 
-
+# In[]: membangun model berdasarkan MLP arsitektur berikut(dalam list) 
 archl=[]
 archl.append('784_256_128_10')
 archl.append('784_256_128_6')
 archl.append('784_256_128_5')
 archl.append('200_100')
 archl.append('1')
-matfile=matlist[0]
+matfile=matlist[0]#memilih satu file saja V1
+
+# In[]: train and predict rolly
 for arch in archl:
-    # In[]: train and predict rolly
     #bdtb.trainModel(matfile,arch)
     label,pred=bdtb.testModel(matfile,arch)
     #bdtb.simpanSemuaGambar(label,pred,matfile)
-    mse=bdtb.simpanMSE(label,pred,matfile,arch)
+    #mse=bdtb.simpanMSE(label,pred,matfile,arch)
+    allscoreresults=bdtb.simpanScore(label, pred, matfile, arch)
+    
     
     # In[1]: data pembanding dari miyawaki
-    predm,labelm,msem=bdtb.simpanMSEMiyawaki()
+    #predm,labelm,msem=bdtb.simpanMSEMiyawaki()
+    predm,labelm,scorem=bdtb.simpanScoreMiyawaki()
     n=10
-    lmse,lmsem,lpred,lpredm,llabel=bdtb.ubahkelistofchunks(mse,msem,pred,predm,label,n)
+    lmse,lmsem,lpred,lpredm,llabel=bdtb.ubahkelistofchunks(allscoreresults,scorem,pred,predm,label,n)
     
     # In[1]: disini runnya okay
     n=1

@@ -44,14 +44,52 @@ def simpanSemuaGambar(pxlb,piksel,matfile):
         simpanGambar(stim,recon,getfigpath(matfile,'reconstruct',n))
         n=n+1
 
-def simpanMSE(pxlb,piksel,matfile,arch):
+def simpanScore(label,pred,matfile,arch):
+    allres=np.zeros(shape=(1,4))
+    for limagerow,predimagerow in zip(label,pred):
+        mlabel=rowtoimagematrix(limagerow)
+        mpred=rowtoimagematrix(predimagerow)
+        mseresult=msescore(mlabel,mpred)
+        ssimresult=ssimscore(mlabel,mpred)
+        psnrresult=psnrscore(mlabel,mpred)
+        corrresult=corrscore(mlabel,mpred)
+        therow=np.array([[mseresult,ssimresult,psnrresult,corrresult]])
+        allres=np.concatenate((allres,therow),axis=0)
+    fname=msefilename(matfile,arch)
+    createfolder(getfoldernamefrompath(fname))
+    allres = np.delete(allres, (0), axis=0)
+    np.savetxt(fname,allres,delimiter=',')
+    return allres
+
+def simpanMSE(label,pred,matfile,arch):#matfile digunakan untuk menamai file
     #mse sendiri
-    mse = ((pxlb - piksel)**2).mean(axis=1)
+    mse = ((label - pred)**2).mean(axis=1)
     fname=msefilename(matfile,arch)
     createfolder(getfoldernamefrompath(fname))
     np.savetxt(fname,mse,delimiter=',')
     return mse
     
+def simpanScoreMiyawaki():
+    directory='../imgRecon/result/s1/V1/smlr/'
+    #matfilename='s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_figRecon_linComb-no_opt_1x1_maxProbLabel_dimNorm.mat'
+    matfilename='s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_figRecon_linComb-errFuncImageNonNegCon_1x1_maxProbLabel_dimNorm.mat'
+    matfile=directory+matfilename
+    mat = scipy.io.loadmat(matfile)
+    pred,label=mat['stimFigTestAllPre'],mat['stimFigTestAll']
+    allres=np.zeros(shape=(1,4))
+    for limagerow,predimagerow in zip(label,pred):
+        mlabel=rowtoimagematrix(limagerow)
+        mpred=rowtoimagematrix(predimagerow)
+        mseresult=msescore(mlabel,mpred)
+        ssimresult=ssimscore(mlabel,mpred)
+        psnrresult=psnrscore(mlabel,mpred)
+        corrresult=corrscore(mlabel,mpred)
+        therow=np.array([[mseresult,ssimresult,psnrresult,corrresult]])
+        allres=np.concatenate((allres,therow),axis=0)
+    allres = np.delete(allres, (0), axis=0)
+    np.savetxt('miyawaki.csv',allres,delimiter=',')
+    return pred,label,allres
+
 def simpanMSEMiyawaki():
     directory='../imgRecon/result/s1/V1/smlr/'
     #matfilename='s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_figRecon_linComb-no_opt_1x1_maxProbLabel_dimNorm.mat'
@@ -187,6 +225,10 @@ def simpanGambar(stim,recon,fname):
                interpolation='nearest')
     plt.savefig(fname)
 
+def rowtoimagematrix(rowimage):
+    matriximage=rowimage.reshape((10,10)).T
+    return matriximage
+
 def plotting(label,pred,predm,fname):
     cols=['stimulus','rolly','miyawaki']
     fig, ax = plt.subplots(nrows=10, ncols=3,figsize=(5, 20))
@@ -304,42 +346,23 @@ def ubahkelistofchunks(mse,msem,pred,predm,label,n):
     llabel=list(divide_chunks(label, n))
     return lmse,lmsem,lpred,lpredm,llabel
 
-def ssimscore(gambar1,gambar2):
-    # Usage:ssimscore('./v2_1x1_reconstruct/10.png','./v2_1x1_reconstruct/10.png')
+def ssimscore(matrixgambar1,matrixgambar2):
     # SSIM: 1.0 is similar
-    # python3 script.py --input original.png --output modified.png
-    # Based on: https://github.com/mostafaGwely/Structural-Similarity-Index-SSIM-
-    
-    # 1. Import the necessary packages
-    imageA = cv2.imread(gambar1)
-    imageB = cv2.imread(gambar2)
-    
-    # 4. Convert the images to grayscale
-    grayA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
-    grayB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)
-    
-    # 5. Compute the Structural Similarity Index (SSIM) between the two
-    #    images, ensuring that the difference image is returned
-    (score, diff) = structural_similarity(grayA, grayB, full=True)
+    (score, diff) = structural_similarity(matrixgambar1, matrixgambar2, full=True)
     diff = (diff * 255).astype("uint8")
-    
     # 6. You can print only the score if you want
     print("SSIM: {}".format(score))
     return score
     
-def msescore(gambar1,gambar2):
-    #mse 1:similar
-    original = cv2.imread(gambar1)
-    contrast = cv2.imread(gambar2,1)
-    mse = np.mean( (original - contrast) ** 2 )
+def msescore(matrixgambar1,matrixgambar2):
+    #mse 0:similar
+    mse = np.mean( (matrixgambar1 - matrixgambar2) ** 2 )
     #mse = ((original - contrast)**2).mean(axis=1)
-    return mse/100
+    return mse
 
-def psnrscore(gambar1,gambar2):
+def psnrscore(matrixgambar1,matrixgambar2):
     #psnr 1:similar
-    original = cv2.imread(gambar1)
-    contrast = cv2.imread(gambar2,1)
-    mse = np.mean( (original - contrast) ** 2 )
+    mse = np.mean( (matrixgambar1 - matrixgambar2) ** 2 )
     if mse == 0:
         psnr = 100
     else:
@@ -347,9 +370,7 @@ def psnrscore(gambar1,gambar2):
         psnr = 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
     return psnr/100
 
-def corrscore(gambar1,gambar2):
+def corrscore(matrixgambar1,matrixgambar2):
     #1 maka similar
-    imageA = cv2.imread(gambar1)
-    imageB = cv2.imread(gambar2)
-    cor = np.corrcoef(imageA.reshape(-1),imageB.reshape(-1))[0][1]
+    cor = np.corrcoef(matrixgambar1.reshape(-1),matrixgambar2.reshape(-1))[0][1]
     return cor
