@@ -58,7 +58,7 @@ def simpanScore(label,pred,matfile,arch):
     fname=msefilename(matfile,arch)
     createfolder(getfoldernamefrompath(fname))
     allres = np.delete(allres, (0), axis=0)
-    np.savetxt(fname,allres,delimiter=',')
+    np.savetxt(fname,allres,delimiter=',', fmt='%f')
     return allres
 
 def simpanMSE(label,pred,matfile,arch):#matfile digunakan untuk menamai file
@@ -87,7 +87,7 @@ def simpanScoreMiyawaki():
         therow=np.array([[mseresult,ssimresult,psnrresult,corrresult]])
         allres=np.concatenate((allres,therow),axis=0)
     allres = np.delete(allres, (0), axis=0)
-    np.savetxt('miyawaki.csv',allres,delimiter=',')
+    np.savetxt('miyawaki.csv',allres,delimiter=',', fmt='%f')
     return pred,label,allres
 
 def simpanMSEMiyawaki():
