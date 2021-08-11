@@ -33,7 +33,7 @@ for arch in archl:
     allscoreresults=bdtb.simpanScore(label, pred, matfile, arch)
     
     
-    # In[1]: data pembanding dari miyawaki
+    # data pembanding dari miyawaki
     #predm,labelm,msem=bdtb.simpanMSEMiyawaki()
     predm,labelm,scorem=bdtb.simpanScoreMiyawaki()
     n=10
