@@ -6,6 +6,8 @@ Created on Fri Aug 13 11:27:30 2021
 """
 
 import bdtb
+import numpy as np
+from lib.denoise import corrupt_image_fast,recover
 
 
 matlist=[]
@@ -25,6 +27,37 @@ archl.append('1')
 matfile=matlist[0]#memilih satu file saja V1
 
 # In[]: train and predict rolly
-for arch in archl:
-    #bdtb.trainModel(matfile,arch)
-    label,pred=bdtb.testModel(matfile,arch)
+arch=archl[0]
+label,pred=bdtb.testModel(matfile,arch)
+# In[]: 
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+image_t=bdtb.rowtoimagematrix(label[1])
+ 
+plt.imshow(image_t,cmap=cm.gray)
+plt.axis('off')
+    
+# In[]: 
+plt.figure(1)
+index = 1
+p=0.15
+gambarjelek=corrupt_image_fast(image_t,p)
+for p in np.linspace(0,1,21):
+    plt.subplot(3,7,index)
+    plt.title(repr("{:1.2f}".format(p)))
+    plt.imshow( corrupt_image_fast(image_t,p), cmap=cm.gray)
+    plt.axis('off')
+    index+=1
+    
+# In[]: 
+plt.imshow(recover(gambarjelek, 1, 3.5),cmap=cm.gray)
+    
+# In[]: 
+    
+    
+# In[]: 
+    
+    
+# In[]: 
+        
+# In[]: 
