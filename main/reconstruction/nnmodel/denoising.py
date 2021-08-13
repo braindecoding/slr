@@ -74,18 +74,41 @@ gambarjelek=corrupt_image_fast(image_t,p)
 plt.imshow(recover(gambarjelek, 1, 3.5),cmap=cm.gray)
 plt.axis('off')
 # In[]: test real prediksinya
-stimulus=bdtb.rowtoimagematrix(label[0])
+stimulus=bdtb.rowtoimagematrix(label[7])
 plt.imshow(stimulus,cmap=cm.gray)
 plt.axis('off')
 # In[]:
-hasilrekonstruksi=bdtb.rowtoimagematrix(pred[0])
+hasilrekonstruksi=bdtb.rowtoimagematrix(pred[7])
 plt.imshow(image_t,cmap=cm.gray)
 plt.axis('off')
-# In[]:
+
 hasilrecovery=recover(hasilrekonstruksi, 1, 3.5)
 plt.imshow(hasilrecovery,cmap=cm.gray)
 plt.axis('off')
 # In[]: 
+K=1
+lmda=6
+for impred in range(len(pred)):
+    stimulus=bdtb.rowtoimagematrix(label[impred])
+    hasilrekonstruksi=bdtb.rowtoimagematrix(pred[impred])
+    hasilrecovery=recover(hasilrekonstruksi, K, lmda)
+    fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12,4))
+    plt.sca(axs[0])
+    plt.imshow(stimulus, cmap=cm.gray)
+    plt.axis('off')
+    plt.title('Stimulus')
+    plt.sca(axs[1])
+    plt.imshow(hasilrekonstruksi, cmap=cm.gray)
+    plt.axis('off')
+    plt.title('hasilrekonstruksi')
+    plt.sca(axs[2])
+    plt.imshow(hasilrecovery, cmap=cm.gray)
+    plt.axis('off')
+    plt.title('hasilrecovery')
+    #plt.tight_layout()
+    plt.suptitle('Overall Title')
+    
+    plt.show()
     
     
 # In[]: 
