@@ -6,8 +6,7 @@ Created on Fri Aug 13 11:27:30 2021
 """
 
 import bdtb
-import numpy as np
-from lib.denoise import corrupt_image_fast,recover
+from lib.denoise import recover
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
@@ -33,61 +32,8 @@ arch=archl[0]
 label,pred=bdtb.testModel(matfile,arch)
 
 # In[]: 
-image_t=bdtb.rowtoimagematrix(label[0])
-
-# In[]: 
-image_t = np.array(
- [[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
- [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,],
- [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,],
- [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
- [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]])
-# In[]: 
-plt.imshow(image_t,cmap=cm.gray)
-plt.axis('off')
-    
-# In[]: 
-plt.figure(1)
-index = 1
-
-for p in np.linspace(0,1,21):
-    plt.subplot(3,7,index)
-    plt.title(repr("{:1.2f}".format(p)))
-    plt.imshow( corrupt_image_fast(image_t,p), cmap=cm.gray)
-    plt.axis('off')
-    index+=1
-    
-# In[]: 
-p=0.15
-gambarjelek=corrupt_image_fast(image_t,p)
-plt.imshow(recover(gambarjelek, 1, 3.5),cmap=cm.gray)
-plt.axis('off')
-# In[]: test real prediksinya
-stimulus=bdtb.rowtoimagematrix(label[7])
-plt.imshow(stimulus,cmap=cm.gray)
-plt.axis('off')
-# In[]:
-hasilrekonstruksi=bdtb.rowtoimagematrix(pred[7])
-plt.imshow(image_t,cmap=cm.gray)
-plt.axis('off')
-
-hasilrecovery=recover(hasilrekonstruksi, 1, 3.5)
-plt.imshow(hasilrecovery,cmap=cm.gray)
-plt.axis('off')
-# In[]: 
 K=1
-lmda=6
+lmda=8
 for impred in range(len(pred)):
     stimulus=bdtb.rowtoimagematrix(label[impred])
     hasilrekonstruksi=bdtb.rowtoimagematrix(pred[impred])
@@ -107,10 +53,5 @@ for impred in range(len(pred)):
     plt.title('hasilrecovery')
     #plt.tight_layout()
     plt.suptitle('Overall Title')
-    
     plt.show()
     
-    
-# In[]: 
-        
-# In[]: 
