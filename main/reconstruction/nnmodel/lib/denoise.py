@@ -30,7 +30,8 @@ def recover(noisy, K=1, lmbda=3.5):
     g = igraph.Graph(edge_list)
     output = g.maxflow(s, t, weights)
     recovered = np.array(output.membership[:-2]).reshape(noisy.shape)
-    return recovered
+    inverted=np.invert(recovered)
+    return inverted
 
 def create_graph(img, K=1, lmbda=3.5):
     max_num = len(img)*len(img[0])
