@@ -5,11 +5,12 @@ Created on Sat Aug 14 08:12:34 2021
 @author: RPL 2020
 """
 
-
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.optimizers import Adam
-from lib import loaddata
+from lib import loaddata,bdtb
 from sklearn.model_selection import train_test_split
 
 
@@ -62,30 +63,28 @@ encoded_train = encoder.predict(input_train)
 encoded_test = encoder.predict(input_test)
 
 # In[]: Reconstructed Data
-reconstructed = autoencoder.predict(input_train)
+reconstructed = autoencoder.predict(pred)
 
 # In[]: Plot gambar
-# n = 10
-# plt.figure(figsize=(20, 4))
 
-# for i in range(n):
-# 	count = 0
-# 	while True:
-# 		if i == test_y[count]:
-# 			# Original
-# 			ax = plt.subplot(2, n, i + 1)
-# 			plt.imshow(test_x[count].reshape(10, 10))
-# 			plt.gray()
-# 			ax.get_xaxis().set_visible(False)
-# 			ax.get_yaxis().set_visible(False)
-
-# 			# Reconstructed
-# 			ax = plt.subplot(2, n, i + 1 + n)
-# 			plt.imshow(reconstructed[count].reshape(10, 10))
-# 			plt.gray()
-# 			ax.get_xaxis().set_visible(False)
-# 			ax.get_yaxis().set_visible(False)
-# 			break;
-
-# 		count += 1
-# plt.show()
+for impred in range(len(reconstructed)):
+    stimulus=bdtb.rowtoimagematrix(label[impred])
+    hasilrekonstruksi=bdtb.rowtoimagematrix(pred[impred])
+    hasilrecovery=bdtb.rowtoimagematrix(reconstructed[impred])
+    fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12,4))
+    plt.sca(axs[0])
+    plt.imshow(stimulus, cmap=cm.gray)
+    plt.axis('off')
+    plt.title('Stimulus')
+    plt.sca(axs[1])
+    plt.imshow(hasilrekonstruksi, cmap=cm.gray)
+    plt.axis('off')
+    plt.title('hasilrekonstruksi')
+    plt.sca(axs[2])
+    plt.imshow(hasilrecovery, cmap=cm.gray)
+    plt.axis('off')
+    plt.title('hasilrecovery')
+    #plt.tight_layout()
+    plt.suptitle('Overall Title')
+    plt.show()
+    
