@@ -10,6 +10,9 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.datasets import mnist
+from lib import loaddata
+from sklearn.model_selection import train_test_split
+
 
 # In[]:# Download and Save MNIST Dataset
 (train_x, train_y), (test_x, test_y) = mnist.load_data()
@@ -23,8 +26,12 @@ train_x = np.reshape(train_x, (len(train_x), np.prod(train_x.shape[1:])))
 test_x = np.reshape(test_x, (len(test_x), np.prod(test_x.shape[1:])))
 
 # In[]:# Target Dimension miyawaki start dari sini karena sudah reshape daro 10x10 menjadi 100 vector
-#train_x=naon#120x100
-#test_x=non#120x100
+label,pred,allscoreresults=loaddata.fromArch(0)
+labelm,predm,allscoreresultsm=loaddata.Miyawaki()
+# In[]:# 
+X=label
+train_x, test_x = train_test_split(X, test_size=0.1, random_state=42)
+
 TARGET_DIM = 16
 INPUT_OUTPUT = 784 #100 untuk data miyawaki
 # In[]:# Encoder pastikan input dan output sama dengan dimenci vector begitu juga
