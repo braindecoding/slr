@@ -5,7 +5,7 @@ Created on Fri Aug 13 11:27:30 2021
 @author: rolly
 """
 
-import bdtb
+from lib import bdtb
 from lib.denoise import recover
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
