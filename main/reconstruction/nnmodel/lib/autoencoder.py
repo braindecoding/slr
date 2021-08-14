@@ -6,11 +6,9 @@ Created on Sat Aug 14 01:46:53 2021
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow as tf
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Activation, Dense
+from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.optimizers import Adam
-from keras.utils.np_utils import to_categorical
 from tensorflow.keras.datasets import mnist
 
 # In[]:# Download and Save MNIST Dataset
@@ -24,11 +22,13 @@ test_x = test_x.astype('float32') / 255.
 train_x = np.reshape(train_x, (len(train_x), np.prod(train_x.shape[1:])))
 test_x = np.reshape(test_x, (len(test_x), np.prod(test_x.shape[1:])))
 
-# In[]:# Target Dimension
+# In[]:# Target Dimension miyawaki start dari sini karena sudah reshape daro 10x10 menjadi 100 vector
+#train_x=naon#120x100
+#test_x=non#120x100
 TARGET_DIM = 16
-
-# In[]:# Encoder
-inputs = Input(shape=(784,))
+INPUT_OUTPUT = 784 #100 untuk data miyawaki
+# In[]:# Encoder pastikan input dan output sama dengan dimenci vector begitu juga
+inputs = Input(shape=(INPUT_OUTPUT,))
 h_encode = Dense(256, activation='relu')(inputs)
 h_encode = Dense(128, activation='relu')(h_encode)
 h_encode = Dense(64, activation='relu')(h_encode)
@@ -42,7 +42,7 @@ h_decode = Dense(32, activation='relu')(encoded)
 h_decode = Dense(64, activation='relu')(h_decode)
 h_decode = Dense(128, activation='relu')(h_decode)
 h_decode = Dense(256, activation='relu')(h_decode)
-outputs = Dense(784, activation='sigmoid')(h_decode)
+outputs = Dense(INPUT_OUTPUT, activation='sigmoid')(h_decode)
 
 # In[]:# Autoencoder Model
 autoencoder = Model(inputs=inputs, outputs=outputs)
@@ -55,6 +55,7 @@ adam = Adam(lr=0.001)
 
 # In[]:# Compile the model Binary Crossentropy
 autoencoder.compile(optimizer=adam, loss='binary_crossentropy')
+print(autoencoder.summary())
 
 # In[]:# Train and Save weight
 autoencoder.fit(train_x, train_x, batch_size=256, epochs=100, verbose=1, shuffle=True, validation_data=(test_x, test_x))
