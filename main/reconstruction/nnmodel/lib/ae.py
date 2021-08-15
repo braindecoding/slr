@@ -4,16 +4,44 @@ Created on Sat Aug 14 01:46:53 2021
 
 @author: RPL 2020
 """
-import numpy as np
-import matplotlib.pyplot as plt
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Dense
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.datasets import mnist
-from lib import loaddata
-from sklearn.model_selection import train_test_split
 
+from tensorflow.keras.models import Model,Sequential
+from tensorflow.keras.layers import Input, Dense, Conv2DTranspose,Conv2D, MaxPool2D, Reshape
+from tensorflow.keras.optimizers import Adam,SGD
 
+# In[]: end of import
+
+def trainCNNDenoise(input_train, output_train,input_test, output_test):
+    # In[]: Encoder
+    denoising_encoder = Sequential([
+        Reshape([28, 28, 1], input_shape=[28, 28]),
+        Conv2D(16, kernel_size=3, padding="SAME", activation="selu"),
+        MaxPool2D(pool_size=2),
+        Conv2D(32, kernel_size=3, padding="SAME", activation="selu"),
+        MaxPool2D(pool_size=2),
+        Conv2D(64, kernel_size=3, padding="SAME", activation="selu"),
+        MaxPool2D(pool_size=2)
+    ])
+    #plot_model(denoising_encoder, to_file='denoising_encoder.png', show_shapes=True)
+    # In[]: Decoder    
+    denoising_decoder = Sequential([
+        Conv2DTranspose(32, kernel_size=3, strides=2, padding="VALID", activation="selu",
+                                     input_shape=[3, 3, 64]),
+        Conv2DTranspose(16, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+        Conv2DTranspose(1, kernel_size=3, strides=2, padding="SAME", activation="sigmoid"),
+        Reshape([28, 28])
+    ])
+    
+    #plot_model(denoising_decoder, to_file='denoising_decoder.png', show_shapes=True)    
+    # In[]: AutoEncoder    
+    
+    denoising_ae = Sequential([denoising_encoder, denoising_decoder])
+    denoising_ae.compile(loss="binary_crossentropy", optimizer=SGD(lr=0.5))
+    denoising_ae.fit(input_train, output_train, batch_size=256, epochs=100, verbose=1, shuffle=True,
+                          validation_data=(input_test, output_test))
+    denoising_ae.save_weights('trainCNNDenoise.h5')
+    return denoising_ae
+    
 def trainDenoise(input_train, output_train,input_test, output_test):
     TARGET_DIM = 10
     INPUT_OUTPUT = 100 #100 untuk data miyawaki
