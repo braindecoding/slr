@@ -5,12 +5,7 @@ Created on Sat Aug 14 08:12:34 2021
 @author: RPL 2020
 """
 
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Dense
-from tensorflow.keras.optimizers import Adam
-from lib import loaddata,bdtb,plot,ae
+from lib import loaddata,plot,ae
 from sklearn.model_selection import train_test_split
 
 
