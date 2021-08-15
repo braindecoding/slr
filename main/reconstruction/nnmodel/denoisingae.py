@@ -71,7 +71,7 @@ lmda=8
 knndenoise=[]
 
 for rekon in reconstructedcnn:
-    knndenoise.append(recover(rekon, K, lmda))
+    knndenoise.append(recover(resize(rekon,(10,10)), K, lmda))
 
 # In[]: plot gambar
 plot.tigaKolomGambar('KNN Denoising','Stimulus',stimulus,'Rekonstruksi',hasilrekonstruksi,'Recovery',knndenoise)
