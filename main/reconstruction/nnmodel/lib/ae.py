@@ -11,6 +11,38 @@ from tensorflow.keras.optimizers import Adam,SGD
 
 # In[]: end of import
 
+def trainCNNDenoise10(input_train, output_train,input_test, output_test):
+    # In[]: Encoder
+    denoising_encoder = Sequential([
+        Reshape([10, 10, 1], input_shape=[10, 10]),
+        Conv2D(16, kernel_size=3, padding="SAME", activation="selu"),
+        MaxPool2D(pool_size=2),
+        Conv2D(32, kernel_size=3, padding="SAME", activation="selu"),
+        MaxPool2D(pool_size=2),
+        Conv2D(64, kernel_size=3, padding="SAME", activation="selu"),
+        MaxPool2D(pool_size=2)
+    ])
+    #plot_model(denoising_encoder, to_file='denoising_encoder.png', show_shapes=True)
+    # In[]: Decoder    
+    denoising_decoder = Sequential([
+        Conv2DTranspose(32, kernel_size=3, strides=2, padding="VALID", activation="selu",
+                                     input_shape=[3, 3, 64]),
+        Conv2DTranspose(16, kernel_size=3, strides=2, padding="SAME", activation="selu"),
+        Conv2DTranspose(1, kernel_size=3, strides=2, padding="SAME", activation="sigmoid"),
+        Reshape([10, 10])
+    ])
+    
+    #plot_model(denoising_decoder, to_file='denoising_decoder.png', show_shapes=True)    
+    # In[]: AutoEncoder    
+    
+    denoising_ae = Sequential([denoising_encoder, denoising_decoder])
+    denoising_ae.compile(loss="binary_crossentropy", optimizer=SGD(lr=0.5))
+    denoising_ae.fit(input_train, output_train, batch_size=256, epochs=100, verbose=1, shuffle=True,
+                          validation_data=(input_test, output_test))
+    denoising_ae.save_weights('trainCNNDenoise.h5')
+    return denoising_ae
+
+# In[]: 
 def trainCNNDenoise(input_train, output_train,input_test, output_test):
     # In[]: Encoder
     denoising_encoder = Sequential([
