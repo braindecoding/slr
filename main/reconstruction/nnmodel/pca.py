@@ -5,7 +5,7 @@ Created on Fri Aug 27 10:59:28 2021
 @author: rolly maulana awangga
 """
 
-from lib import bdtb,ae,plot,citra
+from lib import bdtb,ae,plot,citra,loaddata
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
@@ -49,7 +49,7 @@ autoencoder,encoder=ae.trainDenoise(input_train,output_train,input_test,output_t
 encoded_train = encoder.predict(input_train)
 encoded_test = encoder.predict(input_test)
 
-# In[]: Reconstructed Data
+# In[]: Reconstructed Data, antara nilai cut off shape dan random berbeda, ini masalah barunya
 shapetest,shapelabel=bdtb.getdatatestfrommat(matfile)
 scaler = MinMaxScaler()
 data_rescaledshape = scaler.fit_transform(shapetest)
@@ -60,32 +60,16 @@ reducedshapedt = pca.transform(data_rescaledshape)
 reconstructed = autoencoder.predict(reducedshapedt)
 
 # In[]: buat matrix gambar
+labelm,predm,allscoreresultsm=loaddata.Miyawaki()
+
 stimulus=[]
 hasilrekonstruksi=[]
 hasilrecovery=[]
 for impred in range(len(reconstructed)):
-    stimulus.append(citra.dariRow(label[impred]))
-    hasilrekonstruksi.append(citra.dariRow(pred[impred]))
+    stimulus.append(citra.dariRow(labelm[impred]))
+    hasilrekonstruksi.append(citra.dariRow(predm[impred]))
     hasilrecovery.append(citra.dariRow(reconstructed[impred]))
     
 # In[]: Plot gambar
-plot.tigaKolomGambar('Autoencoder MLP Denoising','Stimulus',stimulus,'Rekonstruksi',hasilrekonstruksi,'Recovery',hasilrecovery) 
 
-    #bdtb.trainModel(matfile,arch)
-    label,pred=bdtb.testModel(matfile,arch)
-    #bdtb.simpanSemuaGambar(label,pred,matfile)
-    #mse=bdtb.simpanMSE(label,pred,matfile,arch)
-    allscoreresults=bdtb.simpanScore(label, pred, matfile, arch)
-    
-    
-    # data pembanding dari miyawaki
-    #predm,labelm,msem=bdtb.simpanMSEMiyawaki()
-    predm,labelm,scorem=bdtb.simpanScoreMiyawaki()
-    n=10
-    lmse,lmsem,lpred,lpredm,llabel=bdtb.ubahkelistofchunks(allscoreresults,scorem,pred,predm,label,n)
-    
-    # In[1]: disini runnya okay
-    n=1
-    for label,pred,predm,mse,msem in zip(llabel,lpred,lpredm,lmse,lmsem):
-        bdtb.plotHasil(label, pred, predm, mse,msem,matfile,n,arch)
-        n=n+1
+plot.tigaKolomGambar('Rekonstruksi PCA','Stimulus',stimulus,'Miyawaki',hasilrekonstruksi,'Rolly',hasilrecovery) 
