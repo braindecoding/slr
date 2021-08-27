@@ -16,6 +16,19 @@ from skimage.metrics import structural_similarity
 import cv2
 import math
 
+def getdatatrainfrommat(matfile):
+    mat = scipy.io.loadmat(matfile)
+    train_data,label=loadtrainandlabel(mat)
+    images=np.delete(label,0,1)
+    return train_data,images
+
+def getdatatestfrommat(matfile):
+    mat = scipy.io.loadmat(matfile)
+    train_data,label=loadtestandlabel(mat)
+    images=np.delete(label,0,1)
+    return train_data,images
+
+
 def trainModel(matfile,arch):
     mat = scipy.io.loadmat(matfile)
     train_data,label=loadtrainandlabel(mat)

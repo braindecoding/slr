@@ -6,7 +6,7 @@ import nibabel as nib
 import matplotlib.pyplot as plt
 from bids import BIDSLayout, BIDSValidator
 from nilearn.plotting import view_img, plot_glass_brain, plot_anat, plot_epi
-
+from skimage.util import montage
 
 
 
@@ -32,8 +32,17 @@ func = nib.load(layout.get(subject='01', scope='raw', suffix='bold', return_type
 # In[]:
 
 plt.imshow(data.get_fdata()[:,:,59])
-plt.imshow(func.get_fdata()[:,:,1,59])
+# In[]:
+plt.imshow(func.get_fdata()[:,:,19,11])
 
+# In[]:
+fmri = func.get_fdata()[:,:,:,0]#ambil data fmri detik pertama
+
+lst=montage(fmri)
+
+fig, ax1 = plt.subplots(1, 1, figsize = (64, 64))
+ax1.imshow(lst)
+fig.savefig('ct_scan.png')
 # In[]:
 plot_anat(data)
 plot_anat(data, draw_cross=False, display_mode='z')
