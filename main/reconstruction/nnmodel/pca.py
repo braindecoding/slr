@@ -27,7 +27,7 @@ archl.append('200_100')
 archl.append('1')
 matfile=matlist[0]#memilih satu file saja V1
 
-# In[]: data preparasi reduksi dimennsi dengan PCA
+# In[]: data preparasi reduksi dimennsi dengan PCA,karena pca dari shape dan random berbeda cobaan kita gabung saja
 
 randomtrain,randomlabel=bdtb.getdatatrainfrommat(matfile)
 scaler = MinMaxScaler()
@@ -35,7 +35,6 @@ data_rescaled = scaler.fit_transform(randomtrain)
 pca = PCA(n_components = 0.854)
 pca.fit(data_rescaled)
 reduced = pca.transform(data_rescaled)
-#bdtb.trainModel(matfile,arch)
 
 # In[]: 
 input_train,input_test=train_test_split(reduced, test_size=0.1, random_state=42)

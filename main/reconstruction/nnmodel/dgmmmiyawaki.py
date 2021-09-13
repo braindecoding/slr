@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import savemat
 from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Input, Dense, Lambda, Flatten, Reshape
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose
 from tensorflow.keras.models import Model
@@ -38,15 +39,36 @@ matfile=matlist[0]
 train_data,label=loadtrainandlabel(matfile)
 testdt,testlb=loadtestandlabel(matfile)
 
+# In[]: Load dataset, dengan train dan test bentuk menggunakan testdt dan testlb saja
 
-# In[]: Load dataset
-Y_train = train_data.astype('float32')
-Y_test = testdt.astype('float32')
+y=testdt.astype('float32')
+x=testlb.astype('float32')
 
-X_train = label#90 gambar dalam baris isi per baris 784 kolom
-X_test = testlb#10 gambar dalam baris isi 784 kolom
-X_train = X_train.astype('float32') / 255.
-X_test = X_test.astype('float32') / 255.
+X_train, X_test, Y_train, Y_test = train_test_split( x, y, test_size=20, random_state=4)
+
+
+# # In[]: Load dataset, yg beda test itu bentuk train acak. 
+# Y_train = train_data.astype('float32')
+# Y_test = testdt.astype('float32')
+
+# X_train = label#90 gambar dalam baris isi per baris 784 kolom
+# X_test = testlb#10 gambar dalam baris isi 784 kolom
+# X_train = X_train.astype('float32') / 255.
+# X_test = X_test.astype('float32') / 255.
+
+
+# # In[]: lihat isinya, ketika dijalankan hasilnya jelek
+# stim0=np.reshape(X_test[0],(10,10)).T
+# stim1=np.reshape(X_test[1],(10,10)).T
+# stim2=np.reshape(X_test[2],(10,10)).T
+# stim3=np.reshape(X_test[3],(10,10)).T
+
+# stimtrain0=np.reshape(X_train[0],(10,10)).T
+# stimtrain1=np.reshape(X_train[1],(10,10)).T
+# stimtrain2=np.reshape(X_train[2],(10,10)).T
+# stimtrain3=np.reshape(X_train[3],(10,10)).T
+
+
 # In[]: X adalah gambar stimulus,ukuran pixel 28x28 = 784 di flatten sebelumnya dalam satu baris, 28 row x 28 column dengan channel 1(samaa kaya miyawaki)
 resolution = 10#sebelumnya 28
 #channel di depan
