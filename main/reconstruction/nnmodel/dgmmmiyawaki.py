@@ -4,7 +4,14 @@ Created on Fri Jun  4 13:25:26 2021
 
 @author: rolly maulana awangga
 """
+# In[]: jika terjadi error pada saat running cnn gunakan ini
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
 
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
+# In[]:
 import os    
 os.environ['THEANO_FLAGS'] = "device=gpu"  
 import numpy as np
