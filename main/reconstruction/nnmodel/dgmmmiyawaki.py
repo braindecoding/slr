@@ -107,8 +107,8 @@ batch_size = 10
 #resolution = 28
 D1 = X_train.shape[1]*X_train.shape[2]*X_train.shape[3]
 D2 = Y_train.shape[1]
-K = 6
-C = 5
+K = 6 #panjang fitur untuk Z (latent space)
+C = 5 # membentuk diagonal array nilai 1 ditengahnya ukuran CxC(mungkin matrix identitas)
 intermediate_dim = 128
 
 #hyper-parameters
@@ -143,11 +143,13 @@ else:
     original_img_size = (img_rows, img_cols, img_chns)#28, 28, 1
 
 
-# In[]: Building the architechture
+# In[]: earsitektur encoder untuk menentukan Z/latent space
+#input kontatenasi dari stimulus dan sinyal fMRI, output berupa Z/latent space sebanyak K
 X = Input(shape=original_img_size)
 Y = Input(shape=(D2,))
 Y_mu = Input(shape=(D2,))
 Y_lsgms = Input(shape=(D2,))
+
 conv_1 = Conv2D(img_chns,
                 kernel_size=(2, 2),
                 padding='same', activation='relu', name='en_conv_1')(X)
@@ -178,11 +180,11 @@ def sampling(args):
     return Z_mu + backend.exp(Z_lsgms) * epsilon
 
 Z = Lambda(sampling, output_shape=(K,))([Z_mu, Z_lsgms])
-# In[]: Lala
+# In[]: Memperlihatkan jumlah fitur output Z sebelum dan sesudah layer lambda
 print (Z_mu.shape)
 print (Z_lsgms.shape)
 print (Z)
-# In[]: we instantiate these layers separately so as to reuse them later
+# In[]: arsitektur decoder untuk merekonstruksi citra(X_mu,X_lsmgs) sebagai outputan dengna inputan Z 
 decoder_hid = Dense(intermediate_dim, activation='relu')
 decoder_upsample = Dense(filters * 5 * 5, activation='relu')
 
@@ -211,6 +213,7 @@ decoder_deconv_3_upsamp = Conv2DTranspose(filters,
                                           strides=(2, 2),
                                           padding='valid',
                                           activation='relu')
+#yang membedakan X_mu dan X_lsgms adalah fungsi aktifasinya
 decoder_mean_squash_mu = Conv2D(img_chns,
                              kernel_size=2,
                              padding='valid',
@@ -220,17 +223,19 @@ decoder_mean_squash_lsgms= Conv2D(img_chns,
                              kernel_size=2,
                              padding='valid',
                              activation='tanh')
-
+#merangkai arsitekturnya disini setelah di atas mendefinisikan setiap layer
 hid_decoded = decoder_hid(Z)
 up_decoded = decoder_upsample(hid_decoded)
 reshape_decoded = decoder_reshape(up_decoded)
 deconv_1_decoded = decoder_deconv_1(reshape_decoded)
 deconv_2_decoded = decoder_deconv_2(deconv_1_decoded)
 x_decoded_relu = decoder_deconv_3_upsamp(deconv_2_decoded)
+
 X_mu = decoder_mean_squash_mu (x_decoded_relu)
 X_lsgms = decoder_mean_squash_lsgms (x_decoded_relu)
 
-# In[]:define objective function
+# In[]: bangun loss function dan 4 model arsitektur, DGMM, encoder, imagepredict dan imagereconstruct
+#Membangun loss function
 logc = np.log(2 * np.pi).astype(np.float32)
 def X_normal_logpdf(x, mu, lsgms):
     lsgms = backend.flatten(lsgms)   
@@ -239,7 +244,7 @@ def X_normal_logpdf(x, mu, lsgms):
 def Y_normal_logpdf(y, mu, lsgms):  
     return backend.mean(-(0.5 * logc + 0.5 * lsgms) - 0.5 * ((y - mu)**2 / backend.exp(lsgms)), axis=-1)
    
-def obj(X, X_mu):
+def obj(X, X_mu):#loss function antara stimulus X dengan citra rekonstruksi X_mu
     X = backend.flatten(X)
     X_mu = backend.flatten(X_mu)
     
@@ -254,18 +259,20 @@ def obj(X, X_mu):
     cost = - lower_bound
               
     return  cost 
-
+#bangun model DGMM basis autoencoder dengan inputan extra fMRI
 DGMM = Model(inputs=[X, Y, Y_mu, Y_lsgms], outputs=X_mu)
 opt_method = optimizers.Adam(learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 DGMM.compile(optimizer = opt_method, loss = obj)
 print("objective function definisikan")
 DGMM.summary()
-# build a model to project inputs on the latent space
+
+# bangun model encoder dari inputs stimulus X menjadi Z yang merupakan latent space
 encoder = Model(inputs=X, outputs=[Z_mu,Z_lsgms])
-# build a model to project inputs on the output space
+
+# Bangun model autoencoder dari input stimulus X menjadi citra rekonstruksi X_mu dan X_lsmgs
 imagepredict = Model(inputs=X, outputs=[X_mu,X_lsgms])
 
-# build a digit generator that can sample from the learned distribution
+# membangun model decoder rekonstruksi untuk testing dari data test, inputan Z(dimensi K) output gambar
 Z_predict = Input(shape=(K,))
 _hid_decoded = decoder_hid(Z_predict)
 _up_decoded = decoder_upsample(_hid_decoded)
@@ -277,7 +284,7 @@ X_mu_predict = decoder_mean_squash_mu(_x_decoded_relu)
 X_lsgms_predict = decoder_mean_squash_mu(_x_decoded_relu)
 imagereconstruct = Model(inputs=Z_predict, outputs=X_mu_predict)
 
-# In[]: Initialization
+# In[]: inisiasi nilai parameter inputan berupa nilai random dahulu, dan dari settingan param sebelumnya
 Z_mu = np.mat(random.random(size=(numTrn,K))).astype(np.float32)
 B_mu = np.mat(random.random(size=(K,D2))).astype(np.float32)
 R_mu = np.mat(random.random(size=(numTrn,C))).astype(np.float32)
@@ -288,19 +295,19 @@ sigma_h = np.mat(np.eye((C))).astype(np.float32)
 tau_mu = tau_alpha / tau_beta
 eta_mu = eta_alpha / eta_beta
 gamma_mu = gamma_alpha / gamma_beta
-
-Y_mu = np.array(Z_mu * B_mu + R_mu * H_mu).astype(np.float32)
+#menentukan nilai Y_mu dan Y_lsgms dari nilai random inisiasi
+Y_mu = np.array(Z_mu * B_mu + R_mu * H_mu).astype(np.float32)#dapat dari nilai random
 Y_lsgms = np.log(1 / gamma_mu * np.ones((numTrn, D2))).astype(np.float32)
 
 savemat('data.mat', {'Y_train':Y_train,'Y_test':Y_test})
 S=np.mat(eng.calculateS(float(k), float(t))).astype(np.float32)
-# In[]: Lala
+# In[]: Y fMRI input, Y_mu didapat dari nilai random, Y_lsgms nilai log
 print (X_train.shape)
 print (Y_train.shape)
 print (Y_mu.shape)
 print (Y_lsgms.shape)
 
-# In[]: Loop training
+# In[]: Loop training Y_mu dan Y_lsgms berubah terus setiap iterasi, optimasi di Z
 for l in range(maxiter):
     print ('**************************************     iter= ', l)
     # update Z
@@ -311,7 +318,7 @@ for l in range(maxiter):
             batch_size=batch_size)         
     [Z_mu,Z_lsgms] = encoder.predict(X_train) 
     Z_mu = np.mat(Z_mu) 
-    # update B
+    # update B dari hasil Z_mu dan Z_lsgms
     temp1 = np.exp(Z_lsgms)
     temp2 = Z_mu.T * Z_mu + np.mat(np.diag(temp1.sum(axis=0)))
     temp3 = tau_mu * np.mat(np.eye(K))
@@ -344,7 +351,7 @@ for l in range(maxiter):
     gamma_beta_new = gamma_beta + 0.5 * gamma_temp
     gamma_mu = gamma_alpha_new / gamma_beta_new
     gamma_mu = gamma_mu[0,0] 
-    # calculate Y_mu   
+    # calculate Y_mu dari random, Y_lsgms dari Y_Train untuk input loop selanjutnya   
     Y_mu = np.array(Z_mu * B_mu + R_mu * H_mu) 
     Y_lsgms = np.log(1 / gamma_mu * np.ones((numTrn, D2)))   
 
@@ -358,7 +365,7 @@ for i in range(numTest):
     z_mu_test = (z_sigma_test * (B_mu * Temp * (np.mat(Y_test)[i,:]).T + rho * np.mat(Z_mu).T * s )).T
     temp_mu = np.zeros((1,img_chns, img_rows, img_cols))#1,1,28,28
     epsilon_std = 1
-    for l in range(L):
+    for l in range(L):#denoising monte carlo
         epsilon=np.random.normal(0,epsilon_std,1)
         z_test = z_mu_test + np.sqrt(np.diag(z_sigma_test))*epsilon
         x_reconstructed_mu = imagereconstruct.predict(z_test, batch_size=1)#1,28,28,1
@@ -369,7 +376,7 @@ for i in range(numTest):
     X_reconstructed_mu[i,:,:,:] = x_reconstructed_mu
 
 # In[]:# visualization the reconstructed images
-n = 10
+n = 20
 for j in range(1):
     plt.figure(figsize=(12, 2))    
     for i in range(n):
@@ -384,3 +391,16 @@ for j in range(1):
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
     plt.show()
+
+# In[]: Hitung MSE
+from lib.bdtb import simpanMSE, simpanMSEMiyawaki, plotHasil
+stim=X_test[:,:,:,0].reshape(20,100)
+rec=X_reconstructed_mu[:,0,:,:].reshape(20,100)
+mse=simpanMSE(stim,rec,matfile,'dgmm')
+
+# data pembanding dari miyawaki
+predm,labelm,msem=simpanMSEMiyawaki()
+msem=msem[-20:]
+
+#Plot hasil
+plotHasil(stim, rec, predm[-20:], mse,msem,matfile,1,'dgmm')

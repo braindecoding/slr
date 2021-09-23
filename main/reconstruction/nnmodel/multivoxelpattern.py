@@ -5,7 +5,7 @@ file pertama yang dijalankan:
     berisi load data semua area, training dan predict kemudian save label dan predictnya
 @author: rolly
 """
-import bdtb
+from lib import bdtb
 
 
 matlist=[]
@@ -26,10 +26,10 @@ matfile=matlist[0]#memilih satu file saja V1
 
 # In[]: train and predict rolly
 for arch in archl:
-    #bdtb.trainModel(matfile,arch)
+    bdtb.trainModel(matfile,arch)
     label,pred=bdtb.testModel(matfile,arch)
-    #bdtb.simpanSemuaGambar(label,pred,matfile)
-    #mse=bdtb.simpanMSE(label,pred,matfile,arch)
+    bdtb.simpanSemuaGambar(label,pred,matfile)
+    mse=bdtb.simpanMSE(label,pred,matfile,arch)
     allscoreresults=bdtb.simpanScore(label, pred, matfile, arch)
     
     
