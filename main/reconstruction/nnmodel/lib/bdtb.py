@@ -71,6 +71,7 @@ def simpanScore(label,pred,matfile,arch):
     fname=msefilename(matfile,arch)
     createfolder(getfoldernamefrompath(fname))
     allres = np.delete(allres, (0), axis=0)
+    print(fname)
     np.savetxt(fname,allres,delimiter=',', fmt='%f')
     return allres
 

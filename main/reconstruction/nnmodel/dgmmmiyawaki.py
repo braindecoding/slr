@@ -423,3 +423,7 @@ n=1
 for label,pred,predm,mse,msem in zip(llabel,lpred,lpredm,lmse,lmsem):
     plotDGMM(label, pred, predm, mse,msem,matfile,n,'DGMM')
     n=n+1
+
+# In[]:
+np.savetxt('skordgmm.csv',scoreresults,delimiter=',')
+np.savetxt('skormiyawaki.csv',scoreresults_miyawaki,delimiter=',')
