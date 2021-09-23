@@ -32,7 +32,7 @@ from tensorflow.keras import metrics
 from tensorflow.python.framework.ops import disable_eager_execution
 disable_eager_execution()
 from dgmm import loadtrainandlabel,loadtestandlabel
-from lib.bdtb import simpanMSE, simpanMSEMiyawaki, plotDGMM,ubahkelistofchunks
+from lib.bdtb import simpanMSE, simpanMSEMiyawaki, plotDGMM,ubahkelistofchunks,simpanScore
 
 
 
@@ -409,21 +409,15 @@ for j in range(1):
 # In[]: Hitung MSE
 stim=X_test[:,:,:,0].reshape(20,100)
 rec=X_reconstructed_mu[:,0,:,:].reshape(20,100)
-#allscoreresults=bdtb.simpanScore(label, pred, matfile, arch)
+
+scoreresults=simpanScore(stim, rec, matfile, 'DGMM')
+scoreresults_miyawaki=simpanScore(stim, Miyawaki_2, matfile, 'Miyawaki')
+
 mse=simpanMSE(stim,rec,matfile,'dgmm')
 msem=simpanMSE(stim,Miyawaki_2,matfile,'miyawaki')
 
-# data pembanding dari miyawaki
-# predm,labelm,msem=simpanMSEMiyawaki()
-# msem=msem[-20:]
-# predm=predm[-20:]
-
-#Plot hasil
-# plotDGMM(stim, rec, Miyawaki_2, mse,msem,matfile,1,'dgmm')
-# plotDGMM(stim, rec, Miyawaki_2, mse,msem,matfile,2,'dgmm')
-
-n=10
-lmse,lmsem,lpred,lpredm,llabel=ubahkelistofchunks(mse,msem,rec,Miyawaki_2,stim,n)
+chunk=10
+lmse,lmsem,lpred,lpredm,llabel=ubahkelistofchunks(mse,msem,rec,Miyawaki_2,stim,chunk)
 
 n=1
 for label,pred,predm,mse,msem in zip(llabel,lpred,lpredm,lmse,lmsem):

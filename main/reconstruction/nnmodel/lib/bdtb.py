@@ -318,7 +318,7 @@ def plotHasil(label,pred,predm,mse,msem,matfile,n,arch):
 def plotDGMM(label,pred,predm,mse,msem,matfile,n,arch):
     fname1=getfigpath(matfile,'resultpict'+'\\'+arch,n)
     createfolder(getsubfolderfrompath(fname1))
-    rows=['Stimulus','Rolly','Miyawaki']
+    rows=['Stimulus','DGMM','Miyawaki']
     idx=list(range(1,len(mse)+1))
     fig, ax = plt.subplots(nrows=3, ncols=10,figsize=(15, 5))
     for axes, row in zip(ax[:,0], rows):
@@ -342,19 +342,19 @@ def plotDGMM(label,pred,predm,mse,msem,matfile,n,arch):
         col.set_xticklabels([])
         col.set_xticks([])
         col.imshow(pm.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
-    plt.suptitle(' Hasil Rekonstruksi Multilayer Perceptron : '+arch+', bagian ke-'+str(n), fontsize=16)
+    plt.suptitle(' Perbandingan Rekonstruksi '+arch+' dan Miyawaki, bagian ke-'+str(n), fontsize=16)
     # plt.show()
     plt.savefig(fname1)
     
     fname2=getfigpath(matfile,'resultmse'+'\\'+arch,n)
     createfolder(getsubfolderfrompath(fname2))
     fige, axe = plt.subplots(figsize=(15, 5))
-    axe.plot(idx, mse, color = 'green', label = 'mse rolly')
+    axe.plot(idx, mse, color = 'green', label = 'mse dgmm')
     axe.plot(idx, msem, color = 'red', label = 'mse miyawaki')
     axe.legend(loc = 'lower left')
     axe.set_xticks(idx)
     # plt.show()
-    plt.suptitle('Perbandingan Mean Suare Error', fontsize=16)
+    plt.suptitle('Perbandingan Mean Square Error', fontsize=16)
     plt.savefig(fname2)
     
     import PIL
