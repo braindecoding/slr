@@ -314,6 +314,62 @@ def plotHasil(label,pred,predm,mse,msem,matfile,n,arch):
     imgs_comb = np.vstack( (np.asarray( i.resize(min_shape) ) for i in imgs ) )
     imgs_comb = PIL.Image.fromarray( imgs_comb)
     imgs_comb.save(fnamegab)
+
+def plotDGMM(label,pred,predm,mse,msem,matfile,n,arch):
+    fname1=getfigpath(matfile,'resultpict'+'\\'+arch,n)
+    createfolder(getsubfolderfrompath(fname1))
+    rows=['Stimulus','Rolly','Miyawaki']
+    idx=list(range(1,len(mse)+1))
+    fig, ax = plt.subplots(nrows=3, ncols=10,figsize=(15, 5))
+    for axes, row in zip(ax[:,0], rows):
+        axes.set_ylabel(row, rotation=90, size='large')
+    for idn,col,fig in zip(idx,ax[0],label):
+        col.set_yticklabels([])
+        col.set_yticks([])
+        col.set_xticklabels([])
+        col.set_xticks([])
+        col.imshow(fig.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
+        col.set_title(idn)
+    for col,p in zip(ax[1],pred):
+        col.set_yticklabels([])
+        col.set_yticks([])
+        col.set_xticklabels([])
+        col.set_xticks([])
+        col.imshow(p.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
+    for col,pm in zip(ax[2],predm):
+        col.set_yticklabels([])
+        col.set_yticks([])
+        col.set_xticklabels([])
+        col.set_xticks([])
+        col.imshow(pm.reshape((10,10)).T, cmap=plt.cm.gray,interpolation='nearest')
+    plt.suptitle(' Hasil Rekonstruksi Multilayer Perceptron : '+arch+', bagian ke-'+str(n), fontsize=16)
+    # plt.show()
+    plt.savefig(fname1)
+    
+    fname2=getfigpath(matfile,'resultmse'+'\\'+arch,n)
+    createfolder(getsubfolderfrompath(fname2))
+    fige, axe = plt.subplots(figsize=(15, 5))
+    axe.plot(idx, mse, color = 'green', label = 'mse rolly')
+    axe.plot(idx, msem, color = 'red', label = 'mse miyawaki')
+    axe.legend(loc = 'lower left')
+    axe.set_xticks(idx)
+    # plt.show()
+    plt.suptitle('Perbandingan Mean Suare Error', fontsize=16)
+    plt.savefig(fname2)
+    
+    import PIL
+    fnamegab=getfigpath(matfile,'results'+'\\'+arch,n)
+    createfolder(getsubfolderfrompath(fnamegab))
+    
+    list_im = [fname1, fname2]
+    imgs    = [ PIL.Image.open(i) for i in list_im ]
+    
+    min_shape = sorted( [(np.sum(i.size), i.size ) for i in imgs])[0][1]
+    imgs_comb = np.hstack( (np.asarray( i.resize(min_shape) ) for i in imgs ) )
+    
+    imgs_comb = np.vstack( (np.asarray( i.resize(min_shape) ) for i in imgs ) )
+    imgs_comb = PIL.Image.fromarray( imgs_comb)
+    imgs_comb.save(fnamegab)
     
 
 def delfirstCol(testlb):

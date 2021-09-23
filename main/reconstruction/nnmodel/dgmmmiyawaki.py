@@ -32,6 +32,8 @@ from tensorflow.keras import metrics
 from tensorflow.python.framework.ops import disable_eager_execution
 disable_eager_execution()
 from dgmm import loadtrainandlabel,loadtestandlabel
+from lib.bdtb import simpanMSE, simpanMSEMiyawaki, plotDGMM,ubahkelistofchunks
+
 
 
 matlist=[]
@@ -45,14 +47,26 @@ matlist.append('../de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leav
 matfile=matlist[0]
 train_data,label=loadtrainandlabel(matfile)
 testdt,testlb=loadtestandlabel(matfile)
-
+predm,labelm,msem=simpanMSEMiyawaki()
 # In[]: Load dataset, dengan train dan test bentuk menggunakan testdt dan testlb saja
 
-y=testdt.astype('float32')
+
 x=testlb.astype('float32')
+y=testdt.astype('float32')
+z=predm.astype('float32')
 
-X_train, X_test, Y_train, Y_test = train_test_split( x, y, test_size=20, random_state=4)
+X_train, X_test, Y_train, Y_test, Miyawaki_1, Miyawaki_2 = train_test_split( x, y, z,test_size=20, random_state=7)
 
+
+# Pembagian Dataset tanpa random
+# fmri=testdt.astype('float32')
+# pict=testlb.astype('float32')
+
+# Y_train = fmri[:100]
+# Y_test = fmri[-20:]
+
+# X_train = pict[:100]
+# X_test = pict[-20:]
 
 # # In[]: Load dataset, yg beda test itu bentuk train acak. 
 # Y_train = train_data.astype('float32')
@@ -101,7 +115,7 @@ numTrn=X_train.shape[0]
 numTest=X_test.shape[0]
 
 # In[]: Set the model parameters and hyper-parameters
-maxiter = 200
+maxiter = 500
 nb_epoch = 1
 batch_size = 10
 #resolution = 28
@@ -393,14 +407,25 @@ for j in range(1):
     plt.show()
 
 # In[]: Hitung MSE
-from lib.bdtb import simpanMSE, simpanMSEMiyawaki, plotHasil
 stim=X_test[:,:,:,0].reshape(20,100)
 rec=X_reconstructed_mu[:,0,:,:].reshape(20,100)
+#allscoreresults=bdtb.simpanScore(label, pred, matfile, arch)
 mse=simpanMSE(stim,rec,matfile,'dgmm')
+msem=simpanMSE(stim,Miyawaki_2,matfile,'miyawaki')
 
 # data pembanding dari miyawaki
-predm,labelm,msem=simpanMSEMiyawaki()
-msem=msem[-20:]
+# predm,labelm,msem=simpanMSEMiyawaki()
+# msem=msem[-20:]
+# predm=predm[-20:]
 
 #Plot hasil
-plotHasil(stim, rec, predm[-20:], mse,msem,matfile,1,'dgmm')
+# plotDGMM(stim, rec, Miyawaki_2, mse,msem,matfile,1,'dgmm')
+# plotDGMM(stim, rec, Miyawaki_2, mse,msem,matfile,2,'dgmm')
+
+n=10
+lmse,lmsem,lpred,lpredm,llabel=ubahkelistofchunks(mse,msem,rec,Miyawaki_2,stim,n)
+
+n=1
+for label,pred,predm,mse,msem in zip(llabel,lpred,lpredm,lmse,lmsem):
+    plotDGMM(label, pred, predm, mse,msem,matfile,n,'DGMM')
+    n=n+1
