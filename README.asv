@@ -12,11 +12,9 @@ after that run:
 3. loadMat
     load file in folder main\data\s1_fmri_mat
 4. generateFigures 
-    to generate all figure presenting to subject under redording
+    (to generate figure presenting to subject under redording)
 4. runrandom
-    to get one random figure
 5. runshape
-    to get one shape figure
 
 ## Running On Matlab 2019a
 You migh meet error :
