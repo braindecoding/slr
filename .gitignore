@@ -20,5 +20,5 @@ main/reconstruction/nnmodel/V3VP_1x1/
 #*.mat
 *.voi
 *.zip
-
+#*.nii
 
