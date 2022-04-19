@@ -11,6 +11,7 @@ after that run:
     make sure there is data in folder :
     main\data\s1_stimulusData
     main\data\s1_resliced
+    main\data\s1_ROI
     file geerate location : main\data\s1_fmri_mat
 ### loadMat
     load file in folder main\data\s1_fmri_mat
