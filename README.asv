@@ -38,14 +38,13 @@ after that run:
     run command : extractDecoder({'1x1'},'V1','leave0')
     output folder : de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_decoder
     output file in folder : 1x1_1--2--3--4--5--6--7--8--9-10-11-12-13-14-15-16-17-18-19-20.mat
-### create combination coefficients for minimiza error
+### Learning of combination coefficients for minimiza error
     run setpath
     run loadMat
     goto : main\reconstruction\imgRecon
-    make sure you have train model in leave1 option as inputs, to get minimum error from k-fold
+    make sure you have train model in leave1 option as inputs,
     run command : calCombCoef_figRecon_smlr('1x1','no_opt','V1')
-### Reconstruction
-    figRecon_smlr('1x1','no_opt','V1')
+    
 
 ## Requirements
 1. Parallel Pool
