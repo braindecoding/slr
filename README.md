@@ -8,11 +8,15 @@ after that run:
     run it after open matlab and set work folder to braindecoding
 ### createMat 
     just run once, to generate mat file from ANALYZE file
-    file location : main\data\s1_fmri_mat
+    make sure there is data in folder :
+    main\data\s1_stimulusData
+    main\data\s1_resliced
+    file geerate location : main\data\s1_fmri_mat
 ### loadMat
     load file in folder main\data\s1_fmri_mat
 ### generateFigures 
     to generate all figure presenting to subject under redording
+    file location : main\data\s1_figures
 ### runrandom
     to get one random figure
 ### runshape
