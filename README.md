@@ -22,6 +22,11 @@ after that run:
 ### runshape
     to get one shape figure
 
+## Requirements
+1. Parallel Pool
+2. Optimization Toolbox(to support slr)
+
+
 ## Running On Matlab 2019a
 You migh meet error :
 Warning: The quasi-newton algorithm does not use analytic Hessian. Hessian flag in
