@@ -46,11 +46,14 @@ after that run:
     run command : calCombCoef_figRecon_smlr('1x1','no_opt','V1')
 ### Reconstruction
     figRecon_smlr('1x1','no_opt','V1')
+    output one file dimNorm
+### Presenting
+    showReconImg('1x1','no_opt','V1')
 
 ## Requirements
 1. Parallel Pool
 2. Optimization Toolbox(to support slr)
-
+3. Bioinformatics Toolbox
 
 ## Running On Matlab 2019a
 You migh meet error :
