@@ -4,18 +4,18 @@ http://brainliner.jp/data/brainliner/Visual_Image_Reconstruction
 ## How to use miyawaki dataset
 Open matlab command and make sure structure directory like HowToUse.pdf guide and put into Matlab folder,
 after that run:
-1. setpath
+### setpath
     run it after open matlab and set work folder to braindecoding
-2. createMat 
+### createMat 
     just run once, to generate mat file from ANALYZE file
     file location : main\data\s1_fmri_mat
-3. loadMat
+### loadMat
     load file in folder main\data\s1_fmri_mat
-4. generateFigures 
+### generateFigures 
     to generate all figure presenting to subject under redording
-4. runrandom
+### runrandom
     to get one random figure
-5. runshape
+### runshape
     to get one shape figure
 
 ## Running On Matlab 2019a
