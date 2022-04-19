@@ -22,6 +22,28 @@ after that run:
     to get one random figure
 ### runshape
     to get one shape figure
+### training decoder model for local spatial
+    run setpath
+    start parallel pool
+    go to main\reconstruction
+    run command : trainLocalDecoder('s1_s1071119',{'1x1'},'V1','leave0',0)
+    output file : de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_1x1_preprocessed.mat
+    output folder : main\reconstruction\de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0
+    each label has two file .mat and RUNNING_INFO
+### compiling training model to a one file
+    run setpath
+    run loadMat
+    start parallel pool
+    go to main\reconstruction
+    run command : extractDecoder({'1x1'},'V1','leave0')
+    output folder : de_s1_V1_Ecc1to11_baseByRestPre_smlr_s1071119ROI_resol10_leave0_decoder
+    output file in folder : 1x1_1--2--3--4--5--6--7--8--9-10-11-12-13-14-15-16-17-18-19-20.mat
+### Learning of combination coefficients for minimiza error
+    run setpath
+    run loadMat
+    goto : main\reconstruction\imgRecon
+    run command : calCombCoef_figRecon_smlr('1x1','no_opt','V1')
+    
 
 ## Requirements
 1. Parallel Pool
