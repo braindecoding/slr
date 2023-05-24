@@ -17,7 +17,6 @@ main/reconstruction/nnmodel/V3VP_1x1/
 *.png
 *.hdr
 *.img
-*.mat
 *.voi
 *.zip
 *.nii
